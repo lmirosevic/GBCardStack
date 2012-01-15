@@ -1,0 +1,264 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8AB7DFA814C32C34003BB140 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AB7DFA714C32C34003BB140 /* UIKit.framework */; };
+		8AB7DFAA14C32C34003BB140 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AB7DFA914C32C34003BB140 /* Foundation.framework */; };
+		8AB7DFAC14C32C34003BB140 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AB7DFAB14C32C34003BB140 /* CoreGraphics.framework */; };
+		8AB7DFB214C32C34003BB140 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8AB7DFB014C32C34003BB140 /* InfoPlist.strings */; };
+		8AB7DFB414C32C34003BB140 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB7DFB314C32C34003BB140 /* main.m */; };
+		8AB7DFB814C32C34003BB140 /* GBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB7DFB714C32C34003BB140 /* GBAppDelegate.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		8AB7DFA314C32C34003BB140 /* Goonbee Cardstack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Goonbee Cardstack.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AB7DFA714C32C34003BB140 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		8AB7DFA914C32C34003BB140 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		8AB7DFAB14C32C34003BB140 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		8AB7DFAF14C32C34003BB140 /* Goonbee Cardstack-Info.plist */ = {isa = PBXFileReference; path = "Goonbee Cardstack-Info.plist"; sourceTree = "<group>"; };
+		8AB7DFB114C32C34003BB140 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8AB7DFB314C32C34003BB140 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8AB7DFB514C32C34003BB140 /* Goonbee Cardstack-Prefix.pch */ = {isa = PBXFileReference; path = "Goonbee Cardstack-Prefix.pch"; sourceTree = "<group>"; };
+		8AB7DFB614C32C34003BB140 /* GBAppDelegate.h */ = {isa = PBXFileReference; path = GBAppDelegate.h; sourceTree = "<group>"; };
+		8AB7DFB714C32C34003BB140 /* GBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GBAppDelegate.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8AB7DFA014C32C33003BB140 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AB7DFA814C32C34003BB140 /* UIKit.framework in Frameworks */,
+				8AB7DFAA14C32C34003BB140 /* Foundation.framework in Frameworks */,
+				8AB7DFAC14C32C34003BB140 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8AB7DF9814C32C33003BB140 = {
+			isa = PBXGroup;
+			children = (
+				8AB7DFAD14C32C34003BB140 /* Goonbee Cardstack */,
+				8AB7DFA614C32C34003BB140 /* Frameworks */,
+				8AB7DFA414C32C34003BB140 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8AB7DFA414C32C34003BB140 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8AB7DFA314C32C34003BB140 /* Goonbee Cardstack.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8AB7DFA614C32C34003BB140 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8AB7DFA714C32C34003BB140 /* UIKit.framework */,
+				8AB7DFA914C32C34003BB140 /* Foundation.framework */,
+				8AB7DFAB14C32C34003BB140 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8AB7DFAD14C32C34003BB140 /* Goonbee Cardstack */ = {
+			isa = PBXGroup;
+			children = (
+				8AB7DFB614C32C34003BB140 /* GBAppDelegate.h */,
+				8AB7DFB714C32C34003BB140 /* GBAppDelegate.m */,
+				8AB7DFAE14C32C34003BB140 /* Supporting Files */,
+			);
+			path = "Goonbee Cardstack";
+			sourceTree = "<group>";
+		};
+		8AB7DFAE14C32C34003BB140 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				8AB7DFAF14C32C34003BB140 /* Goonbee Cardstack-Info.plist */,
+				8AB7DFB014C32C34003BB140 /* InfoPlist.strings */,
+				8AB7DFB314C32C34003BB140 /* main.m */,
+				8AB7DFB514C32C34003BB140 /* Goonbee Cardstack-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8AB7DFA214C32C33003BB140 /* Goonbee Cardstack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8AB7DFBB14C32C34003BB140 /* Build configuration list for PBXNativeTarget "Goonbee Cardstack" */;
+			buildPhases = (
+				8AB7DF9F14C32C33003BB140 /* Sources */,
+				8AB7DFA014C32C33003BB140 /* Frameworks */,
+				8AB7DFA114C32C33003BB140 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Goonbee Cardstack";
+			productName = "Goonbee Cardstack";
+			productReference = 8AB7DFA314C32C34003BB140 /* Goonbee Cardstack.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8AB7DF9A14C32C33003BB140 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = Goonbee;
+			};
+			buildConfigurationList = 8AB7DF9D14C32C33003BB140 /* Build configuration list for PBXProject "Goonbee Cardstack" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 8AB7DF9814C32C33003BB140;
+			productRefGroup = 8AB7DFA414C32C34003BB140 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8AB7DFA214C32C33003BB140 /* Goonbee Cardstack */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8AB7DFA114C32C33003BB140 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AB7DFB214C32C34003BB140 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8AB7DF9F14C32C33003BB140 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AB7DFB414C32C34003BB140 /* main.m in Sources */,
+				8AB7DFB814C32C34003BB140 /* GBAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		8AB7DFB014C32C34003BB140 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8AB7DFB114C32C34003BB140 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8AB7DFB914C32C34003BB140 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		8AB7DFBA14C32C34003BB140 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8AB7DFBC14C32C34003BB140 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Goonbee Cardstack/Goonbee Cardstack-Prefix.pch";
+				INFOPLIST_FILE = "Goonbee Cardstack/Goonbee Cardstack-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		8AB7DFBD14C32C34003BB140 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Goonbee Cardstack/Goonbee Cardstack-Prefix.pch";
+				INFOPLIST_FILE = "Goonbee Cardstack/Goonbee Cardstack-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8AB7DF9D14C32C33003BB140 /* Build configuration list for PBXProject "Goonbee Cardstack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8AB7DFB914C32C34003BB140 /* Debug */,
+				8AB7DFBA14C32C34003BB140 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8AB7DFBB14C32C34003BB140 /* Build configuration list for PBXNativeTarget "Goonbee Cardstack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8AB7DFBC14C32C34003BB140 /* Debug */,
+				8AB7DFBD14C32C34003BB140 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8AB7DF9A14C32C33003BB140 /* Project object */;
+}

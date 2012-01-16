@@ -8,16 +8,39 @@
 
 #import "GBAppDelegate.h"
 
+#import "GBCardStackController.h"
+#import "LeftViewController.h"
+#import "MainViewController.h"
+#import "TopViewController.h"
+#import "RightViewController.h"
+
 @implementation GBAppDelegate
 
 @synthesize window = _window;
+
+@synthesize cardStackController = _cardStackController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
+    
+    LeftViewController *leftViewController = [[LeftViewController alloc] initWithNibName:@"LeftViewController" bundle:nil];
+    MainViewController *mainViewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
+    TopViewController *topViewController = [[TopViewController alloc] initWithNibName:@"TopViewController" bundle:nil];
+    RightViewController *rightViewController = [[RightViewController alloc] initWithNibName:@"RightViewController" bundle:nil];
+        
+    self.cardStackController = [[GBCardStackController alloc] init];
+    self.cardStackController.leftCard = leftViewController;
+    self.cardStackController.mainCard = mainViewController;
+    self.cardStackController.topCard = topViewController;
+    self.cardStackController.rightCard = rightViewController;
+    
+    self.window.rootViewController = self.cardStackController;
+    
+//    self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 

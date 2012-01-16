@@ -11,6 +11,8 @@
 @class GBCardViewController;
 
 extern const double cardOverlapDistance;
+extern const double minimumAutoSlideSpeed;
+extern const double autoSlideSpeed;
 
 typedef enum {
     GBCardViewMainCard = 0,
@@ -18,6 +20,11 @@ typedef enum {
     GBCardViewRightCard,
     GBCardViewTopCard,
 } GBCardViewCardIdentifier;
+
+typedef enum {
+    GBGestureHorizontalPan = 0,
+    GBGestureVerticalPan,
+} GBGesturePanDirection;
 
 @interface GBCardStackController : UIViewController
 

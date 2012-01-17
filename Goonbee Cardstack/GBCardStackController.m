@@ -9,6 +9,7 @@
 #import "GBCardStackController.h"
 
 #import "GBCardViewController.h"
+#import "QuartzCore/QuartzCore.h"
 
 const double GBCardOverlapDistance = 60;
 const double GBHorizontalMinimumAutoSlideSpeed = 500;
@@ -399,6 +400,14 @@ const double GBVerticalAutoSlideSpeed = 950;
     [self.cards replaceObjectAtIndex:GBCardViewMainCard withObject:card];
     card.cardStackController = self;
     [card.view addGestureRecognizer:self.panGestureRecognizer];
+    
+    card.view.layer.masksToBounds = NO;
+    card.view.layer.shadowColor = [[UIColor blackColor] CGColor];
+//    card.view.layer.shadowOffset = CGSizeMake(0,2);
+    card.view.layer.shadowRadius = 4;
+    card.view.layer.shadowOpacity = 0.4;
+    
+    card.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:card.view.bounds].CGPath;
 }
 
 -(GBCardStackController *)mainCard {

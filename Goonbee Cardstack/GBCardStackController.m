@@ -10,9 +10,14 @@
 
 #import "GBCardViewController.h"
 
-const double cardOverlapDistance = 60;
-const double minimumAutoSlideSpeed = 600;
-const double autoSlideSpeed = 1000;
+const double GBCardOverlapDistance = 60;
+const double GBHorizontalMinimumAutoSlideSpeed = 500;
+const double GBHorizontalMaximumAutoSlideSpeed = 1200;
+const double GBHorizontalAutoSlideSpeed = 800;
+
+const double GBVerticalMinimumAutoSlideSpeed = 700;
+const double GBVerticalMaximumAutoSlideSpeed = 1700;
+const double GBVerticalAutoSlideSpeed = 950;
 
 @interface GBCardStackController() {
     NSMutableArray              *_cards;
@@ -28,6 +33,10 @@ const double autoSlideSpeed = 1000;
 
 -(GBCardViewController *)cardWithIdentifier:(GBCardViewCardIdentifier)cardIdentifier;
 -(void)loadCard:(GBCardViewCardIdentifier)cardIdentifier;
+-(void)handlePan:(UIPanGestureRecognizer *)sender;
+-(void)setUserInteractionForObjects:(NSArray *)uiElements toEnabled:(BOOL)enabled;
+-(void)collectEnabledUserInteractionObjectsInView:(UIView *)view inArray:(NSMutableArray *)collection;
+-(NSMutableArray *)findEnabledUserInteractionObjectsInView:(UIView *)view;
 
 @end
 
@@ -46,13 +55,13 @@ const double autoSlideSpeed = 1000;
         CGPoint topCardDestinationOrigin;
         switch (bottomCardId) {
             case GBCardViewLeftCard:
-                topCardDestinationOrigin = CGPointMake(self.currentCard.view.frame.size.width-cardOverlapDistance, self.currentCard.view.frame.origin.y);
+                topCardDestinationOrigin = CGPointMake(self.currentCard.view.frame.size.width-GBCardOverlapDistance, self.currentCard.view.frame.origin.y);
                 break;
             case GBCardViewRightCard:
-                topCardDestinationOrigin = CGPointMake(-self.currentCard.view.frame.size.width+cardOverlapDistance, self.currentCard.view.frame.origin.y);
+                topCardDestinationOrigin = CGPointMake(-self.currentCard.view.frame.size.width+GBCardOverlapDistance, self.currentCard.view.frame.origin.y);
                 break;
             case GBCardViewTopCard:
-                topCardDestinationOrigin = CGPointMake(self.currentCard.view.frame.origin.x, self.currentCard.view.frame.size.height-cardOverlapDistance);
+                topCardDestinationOrigin = CGPointMake(self.currentCard.view.frame.origin.x, self.currentCard.view.frame.size.height-GBCardOverlapDistance);
                 break;
             case GBCardViewMainCard:
                 NSLog(@"Shouldn't animate to oneself");
@@ -65,12 +74,12 @@ const double autoSlideSpeed = 1000;
         
             //calculate animation duration
             NSTimeInterval animationDuration;
-            
+                        
             if (bottomCardId == GBCardViewTopCard) {
-                animationDuration = (self.currentCard.view.frame.size.height-cardOverlapDistance)/autoSlideSpeed;
+                animationDuration = (self.currentCard.view.frame.size.height-GBCardOverlapDistance)/GBVerticalAutoSlideSpeed;
             }
             else {
-                animationDuration = (self.currentCard.view.frame.size.width-cardOverlapDistance)/autoSlideSpeed;
+                animationDuration = (self.currentCard.view.frame.size.width-GBCardOverlapDistance)/GBHorizontalAutoSlideSpeed;
             }
             
             [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationCurveEaseInOut animations:^{
@@ -105,12 +114,11 @@ const double autoSlideSpeed = 1000;
         if (animation) {
             //calculate animation duration
             NSTimeInterval animationDuration;
-            
             if (self.currentCardId == GBCardViewTopCard) {
-                animationDuration = (self.currentCard.view.frame.size.height-cardOverlapDistance)/autoSlideSpeed;
+                animationDuration = (self.currentCard.view.frame.size.height-GBCardOverlapDistance)/GBVerticalAutoSlideSpeed;
             }
             else {
-                animationDuration = (self.currentCard.view.frame.size.width-cardOverlapDistance)/autoSlideSpeed;
+                animationDuration = (self.currentCard.view.frame.size.width-GBCardOverlapDistance)/GBHorizontalAutoSlideSpeed;
             }
             
             [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationCurveEaseInOut animations:^{
@@ -202,7 +210,7 @@ const double autoSlideSpeed = 1000;
         
         //topcard domain
         if ((self.mainCard.view.frame.origin.x == 0) && (self.mainCard.view.frame.origin.y >= 0)) {
-            targetOrigin = CGPointMake(self.currentCard.view.frame.origin.x, self.currentCard.view.frame.size.height-cardOverlapDistance);
+            targetOrigin = CGPointMake(self.currentCard.view.frame.origin.x, self.currentCard.view.frame.size.height-GBCardOverlapDistance);
             distanceRemaining = fabs(targetOrigin.y - self.currentCard.view.frame.origin.y);
             targetSpeed = fabs(velocity.y);
             targetCardId = GBCardViewTopCard;
@@ -212,7 +220,7 @@ const double autoSlideSpeed = 1000;
         }
         //leftcard domain
         else if ((self.mainCard.view.frame.origin.y == 0) && (self.mainCard.view.frame.origin.x >= 0)) {
-            targetOrigin = CGPointMake(self.currentCard.view.frame.size.width-cardOverlapDistance, self.currentCard.view.frame.origin.y);
+            targetOrigin = CGPointMake(self.currentCard.view.frame.size.width-GBCardOverlapDistance, self.currentCard.view.frame.origin.y);
             distanceRemaining = fabs(targetOrigin.x - self.currentCard.view.frame.origin.x);
             targetSpeed = fabs(velocity.x);
             targetCardId = GBCardViewLeftCard;
@@ -222,7 +230,7 @@ const double autoSlideSpeed = 1000;
         }
         //rightcard domain
         else if ((self.mainCard.view.frame.origin.y == 0) && (self.mainCard.view.frame.origin.x < 0)) {
-            targetOrigin = CGPointMake(-self.currentCard.view.frame.size.width+cardOverlapDistance, self.currentCard.view.frame.origin.y);
+            targetOrigin = CGPointMake(-self.currentCard.view.frame.size.width+GBCardOverlapDistance, self.currentCard.view.frame.origin.y);
             distanceRemaining = fabs(targetOrigin.x - self.currentCard.view.frame.origin.x);
             targetSpeed = fabs(velocity.x);
             targetCardId = GBCardViewRightCard;
@@ -231,28 +239,30 @@ const double autoSlideSpeed = 1000;
             }
         }
         
-        //calculate animation duration
-        NSTimeInterval animationDuration;
-        
-        //minimum slide speed
-        if (targetSpeed < minimumAutoSlideSpeed) {
-            targetSpeed = minimumAutoSlideSpeed;
-        }
-        
-        if (forward) {
-            animationDuration = distanceRemaining/targetSpeed;
+        //adjust slide speed
+        if (self.panDirection == GBGestureHorizontalPan) {
+            if (targetSpeed < GBHorizontalMinimumAutoSlideSpeed) {
+                targetSpeed = GBHorizontalMinimumAutoSlideSpeed;
+            }
+            else if (targetSpeed > GBHorizontalMaximumAutoSlideSpeed) {
+                targetSpeed = GBHorizontalMaximumAutoSlideSpeed;
+            }
         }
         else {
-            if (targetCardId == GBCardViewTopCard) {
-                animationDuration = (self.mainCard.view.frame.size.height - distanceRemaining)/targetSpeed;
+            if (targetSpeed < GBVerticalMinimumAutoSlideSpeed) {
+                targetSpeed = GBVerticalMinimumAutoSlideSpeed;
             }
-            else {
-                animationDuration = (self.mainCard.view.frame.size.width - distanceRemaining)/targetSpeed;
+            else if (targetSpeed > GBVerticalMaximumAutoSlideSpeed) {
+                targetSpeed = GBVerticalMaximumAutoSlideSpeed;
             }
         }
-        
+
+        //calculate animation duration
+        NSTimeInterval animationDuration = distanceRemaining/targetSpeed;
+                
         //commit animations
         [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationCurveEaseOut animations:^{
+            self.panGestureRecognizer.enabled = NO;
             //animate
             if (forward) {
                 self.mainCard.view.frame = CGRectMake(targetOrigin.x, targetOrigin.y, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
@@ -270,6 +280,8 @@ const double autoSlideSpeed = 1000;
                 self.currentCardId = GBCardViewMainCard;
                 self.mainCardUserInteraction = YES;
             }
+            
+            self.panGestureRecognizer.enabled = YES;
         }];
     }
     
@@ -349,6 +361,9 @@ const double autoSlideSpeed = 1000;
 }
 
 -(void)setMainCardUserInteraction:(BOOL)enabled {
+    //if already set then return early to prevent overriding the stored ones
+    if (enabled == _mainCardUserInteraction) return;
+    
     //if true, restore
     if (enabled) {
         [self setUserInteractionForObjects:self.mainCardUserInteractionEnabledElements toEnabled:enabled];

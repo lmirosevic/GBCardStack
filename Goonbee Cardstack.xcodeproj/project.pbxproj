@@ -288,10 +288,12 @@
 		8AB7DFBC14C32C34003BB140 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Luka Mirosevic (6G5A2TT98Z)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Goonbee Cardstack/Goonbee Cardstack-Prefix.pch";
 				INFOPLIST_FILE = "Goonbee Cardstack/Goonbee Cardstack-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C6CF2BAA-BCAD-465F-A96B-AEAAAFCCD075";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -299,10 +301,12 @@
 		8AB7DFBD14C32C34003BB140 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Goonbee Cardstack/Goonbee Cardstack-Prefix.pch";
 				INFOPLIST_FILE = "Goonbee Cardstack/Goonbee Cardstack-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

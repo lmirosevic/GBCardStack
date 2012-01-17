@@ -65,7 +65,7 @@ const double GBVerticalAutoSlideSpeed = 950;
                 topCardDestinationOrigin = CGPointMake(self.currentCard.view.frame.origin.x, self.currentCard.view.frame.size.height-GBCardOverlapDistance);
                 break;
             case GBCardViewMainCard:
-                NSLog(@"Shouldn't animate to oneself");
+                NSLog(@"Shouldn't animate to oneself.");
                 break;
         }
         
@@ -141,8 +141,6 @@ const double GBVerticalAutoSlideSpeed = 950;
 }
 
 -(void)handlePan:(UIPanGestureRecognizer *)sender {
-//    NSLog(@"pan %d", sender.state);
-    
     BOOL allGood = YES;
     
     CGPoint velocity = [sender velocityInView:self.view];

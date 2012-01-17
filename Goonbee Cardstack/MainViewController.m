@@ -33,26 +33,26 @@
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-
-    NSLog(@"viewwilldisappear");
+    
+//    NSLog(@"viewwilldisappear");
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    NSLog(@"viewdiddisappear");
+//    NSLog(@"viewdiddisappear");
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    NSLog(@"viewwillappear");
+//    NSLog(@"viewwillappear");
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    NSLog(@"viewdidappear main");
+//    NSLog(@"viewdidappear main");
 }
 
 - (void)viewDidLoad
@@ -60,7 +60,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    NSLog(@"viewdidload");
+//    NSLog(@"viewdidload");
 }
 
 - (void)viewDidUnload

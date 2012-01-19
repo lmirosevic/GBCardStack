@@ -44,8 +44,8 @@ const double GBVerticalAutoSlideSpeed = 950;
 
 @implementation GBCardStackController
 
-@synthesize panDirection = _panDirection;
 @synthesize currentCardId = _currentCardId;
+@synthesize panDirection = _panDirection;
 @synthesize mainCardUserInteractionEnabledElements = _mainCardUserInteractionEnabledElements;
 
 #pragma mark - Card Stack interactions
@@ -64,6 +64,9 @@ const double GBVerticalAutoSlideSpeed = 950;
             case GBCardViewTopCard:
                 topCardDestinationOrigin = CGPointMake(self.currentCard.view.frame.origin.x, self.currentCard.view.frame.size.height-GBCardOverlapDistance);
                 break;
+            case GBCardViewBottomCard:
+                topCardDestinationOrigin = CGPointMake(self.currentCard.view.frame.origin.x, -self.currentCard.view.frame.size.height+GBCardOverlapDistance);
+                break;
             case GBCardViewMainCard:
                 NSLog(@"Shouldn't animate to oneself.");
                 break;
@@ -71,7 +74,8 @@ const double GBVerticalAutoSlideSpeed = 950;
         
         if (animated) {
             //insert bottom card as subview
-            [self.view insertSubview:[self cardWithIdentifier:bottomCardId].view belowSubview:self.mainCard.view];
+//            [self.view insertSubview:[self cardWithIdentifier:bottomCardId].view belowSubview:self.mainCard.view];
+            [self loadCard:bottomCardId];
         
             //calculate animation duration
             NSTimeInterval animationDuration;
@@ -83,21 +87,24 @@ const double GBVerticalAutoSlideSpeed = 950;
                 animationDuration = (self.currentCard.view.frame.size.width-GBCardOverlapDistance)/GBHorizontalAutoSlideSpeed;
             }
             
+            self.mainCardUserInteraction = NO;
+            
             [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationCurveEaseInOut animations:^{
                 //animate top card sliding over
                 self.mainCard.view.frame = CGRectMake(topCardDestinationOrigin.x, topCardDestinationOrigin.y, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
             } completion:^(BOOL finished) {
                 //set currentcard as new card
                 self.currentCardId = bottomCardId;
-                self.mainCardUserInteraction = NO;
             }];
         }
         else {
-            [self.view insertSubview:[self cardWithIdentifier:bottomCardId].view belowSubview:self.mainCard.view];
+//            [self.view insertSubview:[self cardWithIdentifier:bottomCardId].view belowSubview:self.mainCard.view];
+            [self loadCard:bottomCardId];
+            
+            self.mainCardUserInteraction = NO;
             
             self.mainCard.view.frame = CGRectMake(topCardDestinationOrigin.x, topCardDestinationOrigin.y, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
             self.currentCardId = bottomCardId;
-            self.mainCardUserInteraction = NO;
         }
     }
     else {
@@ -141,18 +148,13 @@ const double GBVerticalAutoSlideSpeed = 950;
 }
 
 -(void)handlePan:(UIPanGestureRecognizer *)sender {
-    BOOL allGood = YES;
-    
     CGPoint velocity = [sender velocityInView:self.view];
     CGPoint translation = [sender translationInView:self.view];
     
     //find out which dimension
     if (sender.state == UIGestureRecognizerStateBegan) {
-        CGFloat velX = velocity.x;
-        CGFloat velY = velocity.y;
-        
         //horizontal
-        if (fabs(velX) > fabs(velY)) {
+        if (fabs(velocity.x) > fabs(velocity.y)) {
             self.panDirection = GBGestureHorizontalPan;
         }
         //vertical
@@ -163,52 +165,27 @@ const double GBVerticalAutoSlideSpeed = 950;
     
     //foo what if someone moves the view exactly onto x=0
     
-    //calculate newFrame for mainCard
+    //calculate potential newFrame for mainCard
     CGRect newFrame = self.mainCard.view.frame;
     
-    //manage bottom view
     if (self.panDirection == GBGestureHorizontalPan) {
         newFrame.origin.x += translation.x;
-        
-        //panning to the right
-        if (newFrame.origin.x > 0) {
-            [self loadCard:GBCardViewLeftCard];
-        }
-        //panning to the left
-        else {
-            [self loadCard:GBCardViewRightCard];
-        }
     }
     else if (self.panDirection == GBGestureVerticalPan) {
         newFrame.origin.y += translation.y;
-        
-        //panning down
-        if (newFrame.origin.y > 0) {
-            [self loadCard:GBCardViewTopCard];
-        }
-        //panning up
-        else {
-            allGood = NO;
-        }
     }
+    [sender setTranslation:CGPointMake(0, 0) inView:self.view];
     
-    //if allgood commit the move
-    if (allGood) {
-        self.mainCard.view.frame = newFrame;
-    }
-
-    //finish gesture
-    if ((sender.state == UIGestureRecognizerStateEnded) || (sender.state == UIGestureRecognizerStateFailed)) {
-        CGPoint targetOrigin;
-        CGFloat distanceRemaining;
-        CGFloat targetSpeed;
-        GBCardViewCardIdentifier targetCardId;
-        BOOL forward = YES;
-        
-        //based on position work out target, then based on velocity work out whether to go forward or backward
-        
+    //based on position work out target, then based on velocity work out whether to go forward or backward
+    CGPoint targetOrigin;
+    CGFloat distanceRemaining;
+    CGFloat targetSpeed;
+    GBCardViewCardIdentifier targetCardId;
+    BOOL forward = YES;
+    
+    if (self.panDirection == GBGestureVerticalPan) {
         //topcard domain
-        if ((self.mainCard.view.frame.origin.x == 0) && (self.mainCard.view.frame.origin.y >= 0)) {
+        if (newFrame.origin.y >= 0) {
             targetOrigin = CGPointMake(self.currentCard.view.frame.origin.x, self.currentCard.view.frame.size.height-GBCardOverlapDistance);
             distanceRemaining = fabs(targetOrigin.y - self.currentCard.view.frame.origin.y);
             targetSpeed = fabs(velocity.y);
@@ -217,8 +194,20 @@ const double GBVerticalAutoSlideSpeed = 950;
                 forward = NO;
             }
         }
+        //bottomcard domain
+        else {
+            targetOrigin = CGPointMake(self.currentCard.view.frame.origin.x, -self.currentCard.view.frame.size.height+GBCardOverlapDistance);
+            distanceRemaining = fabs(targetOrigin.y - self.currentCard.view.frame.origin.y);
+            targetSpeed = fabs(velocity.y);
+            targetCardId = GBCardViewBottomCard;
+            if (velocity.y > 0) {
+                forward = NO;
+            }
+        }
+    }
+    else if (self.panDirection == GBGestureHorizontalPan) {
         //leftcard domain
-        else if ((self.mainCard.view.frame.origin.y == 0) && (self.mainCard.view.frame.origin.x >= 0)) {
+        if (newFrame.origin.x >= 0) {
             targetOrigin = CGPointMake(self.currentCard.view.frame.size.width-GBCardOverlapDistance, self.currentCard.view.frame.origin.y);
             distanceRemaining = fabs(targetOrigin.x - self.currentCard.view.frame.origin.x);
             targetSpeed = fabs(velocity.x);
@@ -228,7 +217,7 @@ const double GBVerticalAutoSlideSpeed = 950;
             }
         }
         //rightcard domain
-        else if ((self.mainCard.view.frame.origin.y == 0) && (self.mainCard.view.frame.origin.x < 0)) {
+        else {
             targetOrigin = CGPointMake(-self.currentCard.view.frame.size.width+GBCardOverlapDistance, self.currentCard.view.frame.origin.y);
             distanceRemaining = fabs(targetOrigin.x - self.currentCard.view.frame.origin.x);
             targetSpeed = fabs(velocity.x);
@@ -237,7 +226,73 @@ const double GBVerticalAutoSlideSpeed = 950;
                 forward = NO;
             }
         }
+    }
         
+    //check to see if that movement is valid, movements can't be "diagonal" and target cant be nil
+    BOOL isValidMove = NO;
+    
+    switch (self.currentCardId) {
+        case GBCardViewMainCard:
+            isValidMove = YES;
+            break;
+            
+        case GBCardViewLeftCard:
+            if (self.panDirection == GBGestureHorizontalPan) {
+                isValidMove = YES;
+            }
+            break;
+            
+        case GBCardViewRightCard:
+            if (self.panDirection == GBGestureHorizontalPan) {
+                isValidMove = YES;
+            }
+            break;
+            
+        case GBCardViewTopCard:
+            if (self.panDirection == GBGestureVerticalPan) {
+                isValidMove = YES;
+            }
+            break;
+            
+        case GBCardViewBottomCard:
+            if (self.panDirection == GBGestureVerticalPan) {
+                isValidMove = YES;
+            }
+            break;
+    }
+
+    //check if targetcard is not nil
+    if (![self cardWithIdentifier:targetCardId]) {
+        isValidMove = NO;
+        //cancel the gesture
+        self.panGestureRecognizer.enabled = NO;
+        self.panGestureRecognizer.enabled = YES;
+    }
+    
+    //if move isnt valid, return early
+    if (!isValidMove) return;
+    
+    
+    /* Following section moves the card and changes state, shud only go here if haven't returned early yet ie if move is valid */
+        
+    //make sure target card is loaded
+    if (sender.state != UIGestureRecognizerStateCancelled) {
+        [self loadCard:targetCardId];
+    }
+    //if the gesture is cancelled, reset the main card to top where it should be
+    else {
+        //force default frame
+        self.mainCard.view.frame = CGRectMake(0, 0, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
+        [self loadCard:GBCardViewMainCard];
+    }
+    
+    //commit the change
+    if ((sender.state == UIGestureRecognizerStateChanged) || (sender.state == UIGestureRecognizerStateEnded)) {
+        self.mainCard.view.frame = newFrame;
+    }
+    
+    //finish gesture
+    if ((sender.state == UIGestureRecognizerStateEnded) || (sender.state == UIGestureRecognizerStateFailed)) {
         //adjust slide speed
         if (self.panDirection == GBGestureHorizontalPan) {
             if (targetSpeed < GBHorizontalMinimumAutoSlideSpeed) {
@@ -276,6 +331,15 @@ const double GBVerticalAutoSlideSpeed = 950;
                 self.mainCardUserInteraction = NO;
             }
             else {
+                //unload existing card
+                if (self.currentCardId != GBCardViewMainCard) {
+                    [self.currentCard.view removeFromSuperview];   
+                }
+                else {
+                    [[self cardWithIdentifier:targetCardId].view removeFromSuperview];
+                }
+                
+                //change state
                 self.currentCardId = GBCardViewMainCard;
                 self.mainCardUserInteraction = YES;
             }
@@ -284,27 +348,34 @@ const double GBVerticalAutoSlideSpeed = 950;
         }];
     }
     
-    [sender setTranslation:CGPointMake(0, 0) inView:self.view];
 }
 
 #pragma mark - Convenience
 
 -(void)loadCard:(GBCardViewCardIdentifier)cardIdentifier {
-    if (![self cardWithIdentifier:cardIdentifier].view.superview) {
-        //show card
-        [self.view insertSubview:[self cardWithIdentifier:cardIdentifier].view belowSubview:self.mainCard.view];
-        
-        //hide any other cards except for mainCard in case they are visible
-        for (int i=1; i<4; i++) {
-            if (i != cardIdentifier) {
-                [[self cardWithIdentifier:i].view removeFromSuperview];
+    //hide any other cards except for mainCard in case they are visible
+    for (int i=1; i<5; i++) {
+        if (i != cardIdentifier) {
+            if ([self cardWithIdentifier:i]) { 
+                [[self cardWithIdentifier:i].view removeFromSuperview]; 
             }
         }
+    }
+    
+    //show card
+    if (![self cardWithIdentifier:cardIdentifier].view.superview) {
+        [self.view insertSubview:[self cardWithIdentifier:cardIdentifier].view belowSubview:self.mainCard.view];
     }
 }
 
 -(GBCardViewController *)cardWithIdentifier:(GBCardViewCardIdentifier)cardIdentifier {
-    return [self.cards objectAtIndex:cardIdentifier];
+    
+    if ([[self.cards objectAtIndex:cardIdentifier] isKindOfClass:[NSNull class]]) {
+        return nil;
+    }
+    else {
+        return [self.cards objectAtIndex:cardIdentifier];
+    }
 }
 
 -(void)setUserInteractionForObjects:(NSArray *)uiElements toEnabled:(BOOL)enabled {
@@ -388,7 +459,7 @@ const double GBVerticalAutoSlideSpeed = 950;
     //alloc/init an array first if its nil
     if (!_cards) {
         NSNull *myNull = [NSNull null];
-        _cards = [[NSMutableArray alloc] initWithObjects:myNull, myNull, myNull, myNull, nil];
+        _cards = [[NSMutableArray alloc] initWithObjects:myNull, myNull, myNull, myNull, myNull, nil];
     }
     
     return _cards;
@@ -437,6 +508,15 @@ const double GBVerticalAutoSlideSpeed = 950;
 
 -(GBCardStackController *)topCard {
     return [self.cards objectAtIndex:GBCardViewTopCard];
+}
+
+-(void)setBottomCard:(GBCardViewController *)card {
+    [self.cards replaceObjectAtIndex:GBCardViewBottomCard withObject:card];
+    card.cardStackController = self;
+}
+
+-(GBCardStackController *)bottomCard {
+    return [self.cards objectAtIndex:GBCardViewBottomCard];
 }
 
 #pragma mark - Memory management

@@ -34,7 +34,10 @@
     self.cardStackController.leftCard = leftViewController;
     self.cardStackController.mainCard = mainViewController;
     self.cardStackController.topCard = topViewController;
-    self.cardStackController.rightCard = rightViewController;
+//    self.cardStackController.rightCard = rightViewController;
+//    self.cardStackController.bottomCard = leftViewController;
+    
+    mainViewController.view.alpha = .3;
     
     self.window.rootViewController = self.cardStackController;
     

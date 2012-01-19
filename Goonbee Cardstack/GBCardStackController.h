@@ -23,6 +23,7 @@ typedef enum {
     GBCardViewLeftCard,
     GBCardViewRightCard,
     GBCardViewTopCard,
+    GBCardViewBottomCard,
 } GBCardViewCardIdentifier;
 
 typedef enum {
@@ -38,6 +39,7 @@ typedef enum {
 @property (nonatomic, weak) GBCardViewController                    *leftCard;
 @property (nonatomic, weak) GBCardViewController                    *rightCard;
 @property (nonatomic, weak) GBCardViewController                    *topCard;
+@property (nonatomic, weak) GBCardViewController                    *bottomCard;
 
 -(void)slideCard:(GBCardViewCardIdentifier)card animated:(BOOL)animated;
 -(void)restoreMainCardWithAnimation:(BOOL)animation;

@@ -310,7 +310,7 @@ const double GBVerticalAutoSlideSpeed = 950;
                 targetSpeed = GBVerticalMaximumAutoSlideSpeed;
             }
         }
-
+        
         //calculate animation duration
         NSTimeInterval animationDuration = distanceRemaining/targetSpeed;
                 

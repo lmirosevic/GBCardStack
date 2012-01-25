@@ -41,7 +41,7 @@ typedef enum {
 @property (nonatomic, weak) GBCardViewController                    *topCard;
 @property (nonatomic, weak) GBCardViewController                    *bottomCard;
 
--(void)slideCard:(GBCardViewCardIdentifier)card animated:(BOOL)animated;
+-(void)slideCard:(GBCardViewCardIdentifier)targetCardId animated:(BOOL)animated;
 -(void)restoreMainCardWithAnimation:(BOOL)animation;
 
 @end

@@ -13,5 +13,6 @@
 @interface GBCardViewController : UIViewController
 
 @property (nonatomic, weak) GBCardStackController *cardStackController;
+@property (nonatomic, strong) NSMutableArray *slideableViews;
 
 @end

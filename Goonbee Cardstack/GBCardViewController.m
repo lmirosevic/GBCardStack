@@ -11,6 +11,16 @@
 @implementation GBCardViewController
 
 @synthesize cardStackController = _cardStackController;
+@synthesize slideableViews = _slideableViews;
+
+#pragma mark - Custom accessors
+
+-(NSMutableArray *)slideableViews {
+    if (!_slideableViews) _slideableViews = [[NSMutableArray alloc] init];
+    return _slideableViews;
+}
+
+#pragma mark - Memory management
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -30,21 +40,6 @@
 }
 
 #pragma mark - View lifecycle
-
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView
-{
-}
-*/
-
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-*/
 
 - (void)viewDidUnload
 {

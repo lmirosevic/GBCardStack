@@ -12,11 +12,6 @@
 		8A16033714C3329B000A5D5E /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A16033514C3329B000A5D5E /* MainViewController.xib */; };
 		8A16033C14C3370D000A5D5E /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A16033A14C3370D000A5D5E /* LeftViewController.m */; };
 		8A16033D14C3370D000A5D5E /* LeftViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A16033B14C3370D000A5D5E /* LeftViewController.xib */; };
-		8A59690114CACF63003150E5 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A59690014CACF63003150E5 /* MainStoryboard.storyboard */; };
-		8A8720B114D0705A0070FDEB /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A8720B014D0705A0070FDEB /* icon.png */; };
-		8A8720B314D0705F0070FDEB /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A8720B214D0705F0070FDEB /* icon@2x.png */; };
-		8AB6403B14CADF6D009EDE96 /* browsericon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AB6403914CADF6D009EDE96 /* browsericon.png */; };
-		8AB6403C14CADF6D009EDE96 /* browsericon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AB6403A14CADF6D009EDE96 /* browsericon@2x.png */; };
 		8AB7515214C469B1008DF838 /* TopViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB7515014C469B1008DF838 /* TopViewController.m */; };
 		8AB7515314C469B1008DF838 /* TopViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AB7515114C469B1008DF838 /* TopViewController.xib */; };
 		8AB7515914C46A55008DF838 /* RightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AB7515714C46A55008DF838 /* RightViewController.m */; };
@@ -39,11 +34,6 @@
 		8A16033914C3370D000A5D5E /* LeftViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftViewController.h; sourceTree = "<group>"; };
 		8A16033A14C3370D000A5D5E /* LeftViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftViewController.m; sourceTree = "<group>"; };
 		8A16033B14C3370D000A5D5E /* LeftViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftViewController.xib; sourceTree = "<group>"; };
-		8A59690014CACF63003150E5 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
-		8A8720B014D0705A0070FDEB /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ../icon.png; sourceTree = "<group>"; };
-		8A8720B214D0705F0070FDEB /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "../icon@2x.png"; sourceTree = "<group>"; };
-		8AB6403914CADF6D009EDE96 /* browsericon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = browsericon.png; sourceTree = "<group>"; };
-		8AB6403A14CADF6D009EDE96 /* browsericon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "browsericon@2x.png"; sourceTree = "<group>"; };
 		8AB7514F14C469B1008DF838 /* TopViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopViewController.h; sourceTree = "<group>"; };
 		8AB7515014C469B1008DF838 /* TopViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopViewController.m; sourceTree = "<group>"; };
 		8AB7515114C469B1008DF838 /* TopViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TopViewController.xib; sourceTree = "<group>"; };
@@ -81,19 +71,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8A59690314CACF75003150E5 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				8A8720B214D0705F0070FDEB /* icon@2x.png */,
-				8A8720B014D0705A0070FDEB /* icon.png */,
-				8AB6403914CADF6D009EDE96 /* browsericon.png */,
-				8AB6403A14CADF6D009EDE96 /* browsericon@2x.png */,
-				8A59690014CACF63003150E5 /* MainStoryboard.storyboard */,
-			);
-			name = Resources;
-			path = "Goonbee Cardstack";
-			sourceTree = "<group>";
-		};
 		8AB7515514C469C5008DF838 /* GBCardStack */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,10 +85,8 @@
 		8AB7DF9814C32C33003BB140 = {
 			isa = PBXGroup;
 			children = (
-				8AB7515514C469C5008DF838 /* GBCardStack */,
-				8A59690314CACF75003150E5 /* Resources */,
-				8AB7DFBE14C32C44003BB140 /* View Controllers */,
-				8AB7DFAD14C32C34003BB140 /* Goonbee Cardstack */,
+				8AEA61941534438B0069802F /* Demo */,
+				8AEA6192153443810069802F /* Library */,
 				8AB7DFA614C32C34003BB140 /* Frameworks */,
 				8AB7DFA414C32C34003BB140 /* Products */,
 			);
@@ -177,6 +152,23 @@
 			path = "Goonbee Cardstack";
 			sourceTree = "<group>";
 		};
+		8AEA6192153443810069802F /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				8AB7515514C469C5008DF838 /* GBCardStack */,
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
+		8AEA61941534438B0069802F /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				8AB7DFBE14C32C44003BB140 /* View Controllers */,
+				8AB7DFAD14C32C34003BB140 /* Goonbee Cardstack */,
+			);
+			name = Demo;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -233,11 +225,6 @@
 				8A16033D14C3370D000A5D5E /* LeftViewController.xib in Resources */,
 				8AB7515314C469B1008DF838 /* TopViewController.xib in Resources */,
 				8AB7515A14C46A55008DF838 /* RightViewController.xib in Resources */,
-				8A59690114CACF63003150E5 /* MainStoryboard.storyboard in Resources */,
-				8AB6403B14CADF6D009EDE96 /* browsericon.png in Resources */,
-				8AB6403C14CADF6D009EDE96 /* browsericon@2x.png in Resources */,
-				8A8720B114D0705A0070FDEB /* icon.png in Resources */,
-				8A8720B314D0705F0070FDEB /* icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

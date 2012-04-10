@@ -9,19 +9,13 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
-	<array>
-		<string>icon.png</string>
-		<string>icon@2x.png</string>
-	</array>
+	<array/>
 	<key>CFBundleIcons</key>
 	<dict>
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
 			<key>CFBundleIconFiles</key>
-			<array>
-				<string>icon.png</string>
-				<string>icon@2x.png</string>
-			</array>
+			<array/>
 			<key>UIPrerenderedIcon</key>
 			<true/>
 		</dict>
@@ -39,7 +33,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>5</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>

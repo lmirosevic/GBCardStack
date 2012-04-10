@@ -26,9 +26,7 @@
     // Override point for customization after application launch.
     
     LeftViewController *leftViewController = [[LeftViewController alloc] initWithNibName:@"LeftViewController" bundle:nil];
-//    MainViewController *mainViewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
-    
-    MainViewController *mainViewController = [[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil] instantiateViewControllerWithIdentifier:@"MainScreen"];
+    MainViewController *mainViewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
     TopViewController *topViewController = [[TopViewController alloc] initWithNibName:@"TopViewController" bundle:nil];
     RightViewController *rightViewController = [[RightViewController alloc] initWithNibName:@"RightViewController" bundle:nil];
     
@@ -37,7 +35,7 @@
     self.cardStackController.mainCard = mainViewController;
     self.cardStackController.topCard = topViewController;
     self.cardStackController.rightCard = rightViewController; 
-//    self.cardStackController.bottomCard = leftViewController;
+    self.cardStackController.bottomCard = leftViewController;
     
 //    mainViewController.view.alpha = .3;
     

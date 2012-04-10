@@ -1,0 +1,6 @@
+Sliding card UI paradigm for iOS. Currently used by "VLC Remote HD" on the App Store.
+
+http://itunes.apple.com/us/app/vlc-remote-hd/id507404442?ls=1&mt=8
+
+Similar to the "sliding main view" in the Facebook and Path apps, except it supports all 4 directions, manages autohiding properly, supports sliding by: pan gesture, tap gesture and programatically.
+

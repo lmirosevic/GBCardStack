@@ -16,7 +16,10 @@
 #pragma mark - Custom accessors
 
 -(NSMutableArray *)slideableViews {
-    if (!_slideableViews) _slideableViews = [[NSMutableArray alloc] init];
+    if (!_slideableViews) {
+        _slideableViews = [[NSMutableArray alloc] init];
+    }
+    
     return _slideableViews;
 }
 

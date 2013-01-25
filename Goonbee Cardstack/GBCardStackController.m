@@ -28,41 +28,31 @@ const double GBVerticalAutoSlideSpeed = 950;
     UITapGestureRecognizer      *_tapGestureRecognizer;
 }
 
-@property (nonatomic) GBCardViewCardIdentifier              currentCardId;
-@property (nonatomic, strong) UIPanGestureRecognizer        *panGestureRecognizer;
-@property (nonatomic, strong) UITapGestureRecognizer        *tapGestureRecognizer;
-@property (nonatomic) BOOL                                  mainCardUserInteraction;
-@property (nonatomic, strong) NSMutableArray                *mainCardUserInteractionEnabledElements;
-@property (nonatomic) GBGesturePanDirection                 panDirection;
-@property (nonatomic) BOOL                                  busy;
-@property (nonatomic) CGPoint                               originCopy;
-
--(GBCardViewController *)cardWithIdentifier:(GBCardViewCardIdentifier)cardIdentifier;
--(void)loadCard:(GBCardViewCardIdentifier)cardIdentifier;
--(void)handlePan:(UIPanGestureRecognizer *)sender;
--(void)handleTap:(UITapGestureRecognizer *)sender;
--(void)setUserInteractionForObjects:(NSArray *)uiElements toEnabled:(BOOL)enabled;
--(void)collectEnabledUserInteractionObjectsInView:(UIView *)view inArray:(NSMutableArray *)collection;
--(NSMutableArray *)findEnabledUserInteractionObjectsInView:(UIView *)view;
+@property (assign, nonatomic) GBCardViewCardIdentifier              currentCardId;
+@property (strong, nonatomic) UIPanGestureRecognizer                *panGestureRecognizer;
+@property (strong, nonatomic) UITapGestureRecognizer                *tapGestureRecognizer;
+@property (assign, nonatomic) BOOL                                  mainCardUserInteraction;
+@property (assign, nonatomic) GBGesturePanDirection                 panDirection;
+@property (assign, nonatomic) BOOL                                  busy;
+@property (assign, nonatomic) CGPoint                               originCopy;
+@property (strong, nonatomic) UIView                                *maskView;
 
 @end
 
 
 @implementation GBCardStackController
 
-@synthesize currentCardId = _currentCardId;
-@synthesize panDirection = _panDirection;
-@synthesize mainCardUserInteractionEnabledElements = _mainCardUserInteractionEnabledElements;
-@synthesize busy = _busy;
-@synthesize lock = _lock;
-@synthesize isPanning = _isPanning;
-@synthesize originCopy = _originCopy;
-
 #pragma mark - Card Stack interactions
 
 -(void)slideCard:(GBCardViewCardIdentifier)targetCardId animated:(BOOL)animated {
     if (!self.busy && !self.lock) {
         if ((self.currentCardId == GBCardViewMainCard) && ([self cardWithIdentifier:targetCardId])) {
+            
+            //Flurry
+            NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:self.currentCardId], @"source", [GBCardStackController stringForCardId:targetCardId], @"destination", @"programmatic", @"type", nil];
+            FLogP(@"GBCardStack: Slide card", dict);
+            
+            
             self.busy = YES;
             
             CGPoint topCardDestinationOrigin = CGPointMake(0, 0);//initialising here to make clang happy
@@ -87,10 +77,10 @@ const double GBVerticalAutoSlideSpeed = 950;
             if (animated) {
                 //insert bottom card as subview
                 [self loadCard:targetCardId];
-                
+            
                 //calculate animation duration
                 NSTimeInterval animationDuration;
-                
+                            
                 if ((targetCardId == GBCardViewTopCard) || (targetCardId == GBCardViewBottomCard)) {
                     animationDuration = (self.currentCard.view.frame.size.height-GBVerticalCardOverlapDistance)/GBVerticalAutoSlideSpeed;
                 }
@@ -131,7 +121,7 @@ const double GBVerticalAutoSlideSpeed = 950;
 
 -(void)restoreMainCardWithAnimation:(BOOL)animation {
     if ((self.currentCardId == GBCardViewMainCard) && !self.isPanning) {
-        //        NSLog(@"Already showing main card.");
+//        NSLog(@"Already showing main card.");
     }
     else if (!self.lock && self.isPanning) {
         
@@ -172,6 +162,10 @@ const double GBVerticalAutoSlideSpeed = 950;
             return;
         }
         
+        
+        //Flurry
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:bottomCardId], @"source", [GBCardStackController stringForCardId:GBCardViewMainCard], @"destination", @"programmatic2", @"type", nil];
+        FLogP(@"GBCardStack: Slide card", dict);
         
         
         if (animation) {
@@ -243,7 +237,7 @@ const double GBVerticalAutoSlideSpeed = 950;
             self.currentCardId = GBCardViewMainCard;
             self.tapGestureRecognizer.enabled = NO;
             self.mainCardUserInteraction = YES;
-            
+                        
             self.busy = NO;
         }
     }
@@ -338,7 +332,7 @@ const double GBVerticalAutoSlideSpeed = 950;
                 }
             }
         }
-        
+            
         //check to see if that movement is valid, movements can't be "diagonal" and target cant be nil
         BOOL isValidMove = NO;
         
@@ -371,7 +365,7 @@ const double GBVerticalAutoSlideSpeed = 950;
                 }
                 break;
         }
-        
+
         //check if targetcard is not nil
         if (![self cardWithIdentifier:targetCardId]) {
             isValidMove = NO;
@@ -385,7 +379,7 @@ const double GBVerticalAutoSlideSpeed = 950;
         
         
         /* Following section moves the card and changes state, shud only go here if haven't returned early yet ie if move is valid */
-        
+            
         //make sure target card is loaded
         if (sender.state != UIGestureRecognizerStateCancelled) {
             [self loadCard:targetCardId];
@@ -425,7 +419,7 @@ const double GBVerticalAutoSlideSpeed = 950;
             
             //calculate animation duration
             NSTimeInterval animationDuration = distanceRemaining/targetSpeed;
-            
+                    
             //commit animations
             [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationCurveEaseOut animations:^{
                 self.panGestureRecognizer.enabled = NO;
@@ -442,11 +436,22 @@ const double GBVerticalAutoSlideSpeed = 950;
                 
                 //set currentcardid at end of animation
                 if (forward) {
+                    
+                    //Flurry
+                    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:self.currentCardId], @"source", [GBCardStackController stringForCardId:targetCardId], @"destination", @"pan", @"type", nil];
+                    FLogP(@"GBCardStack: Slide card", dict);
+                    
                     self.currentCardId = targetCardId;
                     self.tapGestureRecognizer.enabled = YES;
                     self.mainCardUserInteraction = NO;
                 }
                 else {
+                    
+                    //Flurry
+                    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:self.currentCardId], @"source", [GBCardStackController stringForCardId:GBCardViewMainCard], @"destination", @"pan", @"type", nil];
+                    FLogP(@"GBCardStack: Slide card", dict);
+                    
+                    
                     //unload existing card
                     if (self.currentCardId != GBCardViewMainCard) {
                         [self.currentCard.view removeFromSuperview];   
@@ -472,6 +477,11 @@ const double GBVerticalAutoSlideSpeed = 950;
     if (!self.lock) {
         if (sender.state == UIGestureRecognizerStateRecognized) {
             if ((self.currentCardId != GBCardViewMainCard) && (!self.busy)) {
+                //Flurry
+                NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:self.currentCardId], @"source", [GBCardStackController stringForCardId:GBCardViewMainCard], @"destination", @"tap on edge", @"type", nil];
+                FLogP(@"GBCardStack: Slide card", dict);
+                
+                
                 [self restoreMainCardWithAnimation:YES];
             }
         }
@@ -482,7 +492,7 @@ const double GBVerticalAutoSlideSpeed = 950;
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     if (gestureRecognizer == self.panGestureRecognizer) {
-        if ((touch.view == self.mainCard.view) || ([self.mainCard.slideableViews containsObject:touch.view])) {
+        if ((touch.view == self.mainCard.view) || ([self.mainCard.slideableViews containsObject:touch.view] || (touch.view == self.maskView))) {
             return YES;
         }
         else {
@@ -540,33 +550,24 @@ const double GBVerticalAutoSlideSpeed = 950;
     }
 }
 
--(void)setUserInteractionForObjects:(NSArray *)uiElements toEnabled:(BOOL)enabled {
-    //loop through all views
-    for (UIView *view in uiElements) {
-        //set its state
-        view.userInteractionEnabled = enabled;
-    }
-}
+-(void)_attachGestureRecognizersToView:(UIView *)view {
+    [self.panGestureRecognizer.view removeGestureRecognizer:self.panGestureRecognizer];
+    [self.tapGestureRecognizer.view removeGestureRecognizer:self.tapGestureRecognizer];
 
--(void)collectEnabledUserInteractionObjectsInView:(UIView *)view inArray:(NSMutableArray *)collection {
-    for (UIView *subview in view.subviews) {
-        if (subview.userInteractionEnabled) {
-            [collection addObject:subview];
-        }
-        
-        [self collectEnabledUserInteractionObjectsInView:subview inArray:collection];
-    }
-}
-
--(NSMutableArray *)findEnabledUserInteractionObjectsInView:(UIView *)view {
-    NSMutableArray *enabledViews = [[NSMutableArray alloc] init];
-    
-    [self collectEnabledUserInteractionObjectsInView:view inArray:enabledViews];
-    
-    return enabledViews;
+    [view addGestureRecognizer:self.panGestureRecognizer];
+    [view addGestureRecognizer:self.tapGestureRecognizer];
 }
 
 #pragma mark - Accessors
+
+-(UIView *)maskView {
+    if (!_maskView) {
+        _maskView = [[UIView alloc] initWithFrame:self.mainCard.view.bounds];
+        _maskView.userInteractionEnabled = YES;
+    }
+    
+    return _maskView;
+}
 
 -(UIPanGestureRecognizer *)panGestureRecognizer {
     if (!_panGestureRecognizer) {
@@ -592,30 +593,21 @@ const double GBVerticalAutoSlideSpeed = 950;
     _tapGestureRecognizer = tapGestureRecognizer;
 }
 
--(NSMutableArray *)mainCardUserInteractionEnabledElements {
-    if (!_mainCardUserInteractionEnabledElements) {
-        _mainCardUserInteractionEnabledElements = [[NSMutableArray alloc] init];
-    }
-    
-    return _mainCardUserInteractionEnabledElements;
-}
-
 -(BOOL)mainCardUserInteraction {
     return _mainCardUserInteraction;
 }
 
 -(void)setMainCardUserInteraction:(BOOL)enabled {
-    //if already set then return early to prevent overriding the stored ones
-    if (enabled == _mainCardUserInteraction) return;
-    
-    //if true, restore
+    //remove mask view
     if (enabled) {
-        [self setUserInteractionForObjects:self.mainCardUserInteractionEnabledElements toEnabled:enabled];
+        [self.maskView removeFromSuperview];
+        [self _attachGestureRecognizersToView:self.mainCard.view];
     }
-    //if false, find the enabled ones, store them, disable them
+    //add mask view
     else {
-        self.mainCardUserInteractionEnabledElements = [self findEnabledUserInteractionObjectsInView:self.mainCard.view];
-        [self setUserInteractionForObjects:self.mainCardUserInteractionEnabledElements toEnabled:enabled];
+        [self.mainCard.view addSubview:self.maskView];
+        self.maskView.frame = self.mainCard.view.bounds;
+        [self _attachGestureRecognizersToView:self.maskView];
     }
     
     _mainCardUserInteraction = enabled;
@@ -645,10 +637,9 @@ const double GBVerticalAutoSlideSpeed = 950;
     card.cardStackController = self;
     
     //gesture recognisers
-    [card.view addGestureRecognizer:self.panGestureRecognizer];
     self.panGestureRecognizer.delegate = self;
-    [card.view addGestureRecognizer:self.tapGestureRecognizer];
     self.tapGestureRecognizer.delegate = self;
+    [self _attachGestureRecognizersToView:card.view];
     
     //shadow
     card.view.layer.masksToBounds = NO;
@@ -698,42 +689,18 @@ const double GBVerticalAutoSlideSpeed = 950;
     return [self.cards objectAtIndex:GBCardViewBottomCard];
 }
 
-#pragma mark - Memory management
-
-- (void)didReceiveMemoryWarning
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
-
 #pragma mark - View lifecycle
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    if ([self cardWithIdentifier:GBCardViewMainCard]) {       
-        [self.view addSubview:self.mainCard.view];
-        self.currentCardId = GBCardViewMainCard;
-        self.tapGestureRecognizer.enabled = NO;
+
+    if ([self cardWithIdentifier:GBCardViewMainCard]) {
+        if (!self.mainCard.view.superview) {
+            [self.view addSubview:self.mainCard.view];
+            self.currentCardId = GBCardViewMainCard;
+            self.tapGestureRecognizer.enabled = NO;
+        }
     }
-}
-
--(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
--(void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
--(void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-
--(void)viewDidLoad {
-    [super viewDidLoad];
 }
 
 -(void)viewDidUnload {
@@ -742,13 +709,9 @@ const double GBVerticalAutoSlideSpeed = 950;
     _cards = nil;
     self.panGestureRecognizer = nil;
     self.tapGestureRecognizer = nil;
-    self.mainCardUserInteractionEnabledElements = nil;
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }

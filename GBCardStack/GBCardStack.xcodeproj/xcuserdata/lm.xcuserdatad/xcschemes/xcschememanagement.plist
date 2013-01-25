@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Goonbee Cardstack.xcscheme</key>
+		<key>GBCardStack.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,7 +12,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>8AB7DFA214C32C33003BB140</key>
+		<key>8A01EE2416B2CEF4006E7EA2</key>
 		<dict>
 			<key>primary</key>
 			<true/>

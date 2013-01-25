@@ -12,6 +12,23 @@
 		8A01EE3B16B2CF0E006E7EA2 /* GBCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A01EE3916B2CF0E006E7EA2 /* GBCardViewController.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		8A01EE7C16B2D15B006E7EA2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8AD911B1162D9E2200C9D287;
+			remoteInfo = GBToolbox;
+		};
+		8A01EE7E16B2D15B006E7EA2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A0C4E34165FA60C00A990FB;
+			remoteInfo = GBToolboxUnitTests;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		8A01EE2316B2CEF4006E7EA2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -32,6 +49,7 @@
 		8A01EE3716B2CF0E006E7EA2 /* GBCardStackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBCardStackController.m; sourceTree = "<group>"; };
 		8A01EE3816B2CF0E006E7EA2 /* GBCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBCardViewController.h; sourceTree = "<group>"; };
 		8A01EE3916B2CF0E006E7EA2 /* GBCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBCardViewController.m; sourceTree = "<group>"; };
+		8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GBToolbox.xcodeproj; path = ../GBToolbox/GBToolbox.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +67,7 @@
 		8A01EE1A16B2CEF4006E7EA2 = {
 			isa = PBXGroup;
 			children = (
+				8A01EE7216B2D141006E7EA2 /* Libraries */,
 				8A01EE2A16B2CEF4006E7EA2 /* GBCardStack */,
 				8A01EE2716B2CEF4006E7EA2 /* Frameworks */,
 				8A01EE2616B2CEF4006E7EA2 /* Products */,
@@ -99,6 +118,23 @@
 			name = Source;
 			sourceTree = "<group>";
 		};
+		8A01EE7216B2D141006E7EA2 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		8A01EE7516B2D15B006E7EA2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8A01EE7D16B2D15B006E7EA2 /* libGBToolbox.a */,
+				8A01EE7F16B2D15B006E7EA2 /* GBToolboxUnitTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -138,12 +174,35 @@
 			mainGroup = 8A01EE1A16B2CEF4006E7EA2;
 			productRefGroup = 8A01EE2616B2CEF4006E7EA2 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 8A01EE7516B2D15B006E7EA2 /* Products */;
+					ProjectRef = 8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8A01EE2416B2CEF4006E7EA2 /* GBCardStack */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		8A01EE7D16B2D15B006E7EA2 /* libGBToolbox.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGBToolbox.a;
+			remoteRef = 8A01EE7C16B2D15B006E7EA2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8A01EE7F16B2D15B006E7EA2 /* GBToolboxUnitTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GBToolboxUnitTests.octest;
+			remoteRef = 8A01EE7E16B2D15B006E7EA2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8A01EE2116B2CEF4006E7EA2 /* Sources */ = {
@@ -179,8 +238,11 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = "-ObjC";
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -199,7 +261,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = "-ObjC";
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -248,6 +313,7 @@
 				8A01EE3516B2CEF4006E7EA2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

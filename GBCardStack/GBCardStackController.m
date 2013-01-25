@@ -9,7 +9,9 @@
 #import "GBCardStackController.h"
 
 #import "GBCardViewController.h"
-#import "QuartzCore/QuartzCore.h"
+#import <QuartzCore/QuartzCore.h>
+
+#import "GBToolbox.h"
 
 const double GBHorizontalCardOverlapDistance = 56;
 const double GBHorizontalMinimumAutoSlideSpeed = 500;

@@ -16,7 +16,7 @@
                BlueprintIdentifier = "8AB7DFA214C32C33003BB140"
                BuildableName = "Cardstack.app"
                BlueprintName = "Cardstack"
-               ReferencedContainer = "container:Goonbee Cardstack.xcodeproj">
+               ReferencedContainer = "container:GBCardStack.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,7 +34,7 @@
             BlueprintIdentifier = "8AB7DFA214C32C33003BB140"
             BuildableName = "Cardstack.app"
             BlueprintName = "Cardstack"
-            ReferencedContainer = "container:Goonbee Cardstack.xcodeproj">
+            ReferencedContainer = "container:GBCardStack.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -44,6 +44,7 @@
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Debug"
+      ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable>
@@ -52,7 +53,7 @@
             BlueprintIdentifier = "8AB7DFA214C32C33003BB140"
             BuildableName = "Cardstack.app"
             BlueprintName = "Cardstack"
-            ReferencedContainer = "container:Goonbee Cardstack.xcodeproj">
+            ReferencedContainer = "container:GBCardStack.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -70,7 +71,7 @@
             BlueprintIdentifier = "8AB7DFA214C32C33003BB140"
             BuildableName = "Cardstack.app"
             BlueprintName = "Cardstack"
-            ReferencedContainer = "container:Goonbee Cardstack.xcodeproj">
+            ReferencedContainer = "container:GBCardStack.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

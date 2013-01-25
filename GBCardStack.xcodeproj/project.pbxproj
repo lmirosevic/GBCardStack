@@ -44,10 +44,10 @@
 		8AB7DFA714C32C34003BB140 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8AB7DFA914C32C34003BB140 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8AB7DFAB14C32C34003BB140 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		8AB7DFAF14C32C34003BB140 /* Goonbee Cardstack-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Goonbee Cardstack-Info.plist"; sourceTree = "<group>"; };
+		8AB7DFAF14C32C34003BB140 /* GBCardStack-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GBCardStack-Info.plist"; sourceTree = "<group>"; };
 		8AB7DFB114C32C34003BB140 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8AB7DFB314C32C34003BB140 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		8AB7DFB514C32C34003BB140 /* Goonbee Cardstack-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Goonbee Cardstack-Prefix.pch"; sourceTree = "<group>"; };
+		8AB7DFB514C32C34003BB140 /* GBCardStack-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GBCardStack-Prefix.pch"; sourceTree = "<group>"; };
 		8AB7DFB614C32C34003BB140 /* GBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GBAppDelegate.h; sourceTree = "<group>"; };
 		8AB7DFB714C32C34003BB140 /* GBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GBAppDelegate.m; sourceTree = "<group>"; };
 		8AB7DFBF14C32C82003BB140 /* GBCardStackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GBCardStackController.h; path = "Goonbee Cardstack/GBCardStackController.h"; sourceTree = "<group>"; };
@@ -124,10 +124,10 @@
 		8AB7DFAE14C32C34003BB140 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8AB7DFAF14C32C34003BB140 /* Goonbee Cardstack-Info.plist */,
+				8AB7DFAF14C32C34003BB140 /* GBCardStack-Info.plist */,
 				8AB7DFB014C32C34003BB140 /* InfoPlist.strings */,
 				8AB7DFB314C32C34003BB140 /* main.m */,
-				8AB7DFB514C32C34003BB140 /* Goonbee Cardstack-Prefix.pch */,
+				8AB7DFB514C32C34003BB140 /* GBCardStack-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -198,7 +198,7 @@
 				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = Goonbee;
 			};
-			buildConfigurationList = 8AB7DF9D14C32C33003BB140 /* Build configuration list for PBXProject "Goonbee Cardstack" */;
+			buildConfigurationList = 8AB7DF9D14C32C33003BB140 /* Build configuration list for PBXProject "GBCardStack" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -310,8 +310,8 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Luka Mirosevic (6G5A2TT98Z)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Goonbee Cardstack/Goonbee Cardstack-Prefix.pch";
-				INFOPLIST_FILE = "Goonbee Cardstack/Goonbee Cardstack-Info.plist";
+				GCC_PREFIX_HEADER = "Goonbee Cardstack/GBCardStack-Prefix.pch";
+				INFOPLIST_FILE = "Goonbee Cardstack/GBCardStack-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C6CF2BAA-BCAD-465F-A96B-AEAAAFCCD075";
 				WRAPPER_EXTENSION = app;
@@ -323,8 +323,8 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Goonbee Cardstack/Goonbee Cardstack-Prefix.pch";
-				INFOPLIST_FILE = "Goonbee Cardstack/Goonbee Cardstack-Info.plist";
+				GCC_PREFIX_HEADER = "Goonbee Cardstack/GBCardStack-Prefix.pch";
+				INFOPLIST_FILE = "Goonbee Cardstack/GBCardStack-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
@@ -334,7 +334,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8AB7DF9D14C32C33003BB140 /* Build configuration list for PBXProject "Goonbee Cardstack" */ = {
+		8AB7DF9D14C32C33003BB140 /* Build configuration list for PBXProject "GBCardStack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8AB7DFB914C32C34003BB140 /* Debug */,

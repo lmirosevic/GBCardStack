@@ -1,5 +1,5 @@
 //
-//  GBCardViewController.h
+//  UIViewController+GBCardStack.h
 //  Goonbee Cardstack
 //
 //  Created by Luka Mirošević on 15/01/2012.
@@ -10,7 +10,7 @@
 
 @class GBCardStackController;
 
-@interface GBCardViewController : UIViewController
+@interface UIViewController (GBCardStack)
 
 @property (weak, nonatomic) GBCardStackController   *cardStackController;
 @property (strong, nonatomic) NSMutableArray        *slideableViews;

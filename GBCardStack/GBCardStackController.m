@@ -8,7 +8,6 @@
 
 #import "GBCardStackController.h"
 
-#import "GBCardViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
 #import "GBToolbox.h"
@@ -545,7 +544,7 @@ const double GBVerticalAutoSlideSpeed = 950;
     }
 }
 
--(GBCardViewController *)cardWithIdentifier:(GBCardViewCardIdentifier)cardIdentifier {
+-(UIViewController *)cardWithIdentifier:(GBCardViewCardIdentifier)cardIdentifier {
     if ([[self.cards objectAtIndex:cardIdentifier] isKindOfClass:[NSNull class]]) {
         return nil;
     }
@@ -617,7 +616,7 @@ const double GBVerticalAutoSlideSpeed = 950;
     _mainCardUserInteraction = enabled;
 }
 
--(GBCardViewController *)currentCard {
+-(UIViewController *)currentCard {
     return [self.cards objectAtIndex:self.currentCardId];
 }
 
@@ -635,7 +634,7 @@ const double GBVerticalAutoSlideSpeed = 950;
     return _cards;
 }
 
--(void)setMainCard:(GBCardViewController *)card {
+-(void)setMainCard:(UIViewController *)card {
     //standard setter
     [self.cards replaceObjectAtIndex:GBCardViewMainCard withObject:card];
     card.cardStackController = self;
@@ -657,7 +656,7 @@ const double GBVerticalAutoSlideSpeed = 950;
     return [self.cards objectAtIndex:GBCardViewMainCard];
 }
 
--(void)setLeftCard:(GBCardViewController *)card {
+-(void)setLeftCard:(UIViewController *)card {
     [self.cards replaceObjectAtIndex:GBCardViewLeftCard withObject:card];
     card.cardStackController = self;
 }
@@ -666,7 +665,7 @@ const double GBVerticalAutoSlideSpeed = 950;
     return [self.cards objectAtIndex:GBCardViewLeftCard];
 }
 
--(void)setRightCard:(GBCardViewController *)card {
+-(void)setRightCard:(UIViewController *)card {
     [self.cards replaceObjectAtIndex:GBCardViewRightCard withObject:card];
     card.cardStackController = self;
 }
@@ -675,7 +674,7 @@ const double GBVerticalAutoSlideSpeed = 950;
     return [self.cards objectAtIndex:GBCardViewRightCard];
 }
 
--(void)setTopCard:(GBCardViewController *)card {
+-(void)setTopCard:(UIViewController *)card {
     [self.cards replaceObjectAtIndex:GBCardViewTopCard withObject:card];
     card.cardStackController = self;
 }
@@ -684,7 +683,7 @@ const double GBVerticalAutoSlideSpeed = 950;
     return [self.cards objectAtIndex:GBCardViewTopCard];
 }
 
--(void)setBottomCard:(GBCardViewController *)card {
+-(void)setBottomCard:(UIViewController *)card {
     [self.cards replaceObjectAtIndex:GBCardViewBottomCard withObject:card];
     card.cardStackController = self;
 }

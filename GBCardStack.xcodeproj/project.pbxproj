@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		8A01EE2916B2CEF4006E7EA2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A01EE2816B2CEF4006E7EA2 /* Foundation.framework */; };
 		8A01EE3A16B2CF0E006E7EA2 /* GBCardStackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A01EE3716B2CF0E006E7EA2 /* GBCardStackController.m */; };
-		8A01EE3B16B2CF0E006E7EA2 /* GBCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A01EE3916B2CF0E006E7EA2 /* GBCardViewController.m */; };
+		8A01EE3B16B2CF0E006E7EA2 /* UIViewController+GBCardStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A01EE3916B2CF0E006E7EA2 /* UIViewController+GBCardStack.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,8 +54,8 @@
 		8A01EE2C16B2CEF4006E7EA2 /* GBCardStack-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GBCardStack-Prefix.pch"; sourceTree = "<group>"; };
 		8A01EE3616B2CF0E006E7EA2 /* GBCardStackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBCardStackController.h; sourceTree = "<group>"; };
 		8A01EE3716B2CF0E006E7EA2 /* GBCardStackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBCardStackController.m; sourceTree = "<group>"; };
-		8A01EE3816B2CF0E006E7EA2 /* GBCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBCardViewController.h; sourceTree = "<group>"; };
-		8A01EE3916B2CF0E006E7EA2 /* GBCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBCardViewController.m; sourceTree = "<group>"; };
+		8A01EE3816B2CF0E006E7EA2 /* UIViewController+GBCardStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+GBCardStack.h"; sourceTree = "<group>"; };
+		8A01EE3916B2CF0E006E7EA2 /* UIViewController+GBCardStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+GBCardStack.m"; sourceTree = "<group>"; };
 		8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GBToolbox.xcodeproj; path = ../GBToolbox/GBToolbox.xcodeproj; sourceTree = "<group>"; };
 		8AF687D516B8062400FEF6A7 /* GBAnalytics.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GBAnalytics.xcodeproj; path = ../GBAnalytics/GBAnalytics.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -120,8 +120,8 @@
 			children = (
 				8A01EE3616B2CF0E006E7EA2 /* GBCardStackController.h */,
 				8A01EE3716B2CF0E006E7EA2 /* GBCardStackController.m */,
-				8A01EE3816B2CF0E006E7EA2 /* GBCardViewController.h */,
-				8A01EE3916B2CF0E006E7EA2 /* GBCardViewController.m */,
+				8A01EE3816B2CF0E006E7EA2 /* UIViewController+GBCardStack.h */,
+				8A01EE3916B2CF0E006E7EA2 /* UIViewController+GBCardStack.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -238,7 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A01EE3A16B2CF0E006E7EA2 /* GBCardStackController.m in Sources */,
-				8A01EE3B16B2CF0E006E7EA2 /* GBCardViewController.m in Sources */,
+				8A01EE3B16B2CF0E006E7EA2 /* UIViewController+GBCardStack.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

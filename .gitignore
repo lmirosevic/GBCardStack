@@ -66,9 +66,8 @@ build/
 # You can safely ignore the xcuserdata files - but do NOT ignore the files next to them
 #
 
-UserInterfaceState.xcuserstate
-WorkspaceSettings.xcsettings
-xcdebugger
+xcuserdata
+#UserInterfaceState.xcuserstate
 
 ####
 # XCode 4 workspaces - more detailed

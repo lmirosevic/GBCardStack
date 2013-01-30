@@ -34,19 +34,18 @@ typedef enum {
 
 @interface GBCardStackController : UIViewController <UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong, readonly) NSMutableArray              *cards;
-@property (nonatomic, strong, readonly) GBCardViewController        *currentCard;
-@property (nonatomic, weak) GBCardViewController                    *mainCard;
-@property (nonatomic, weak) GBCardViewController                    *leftCard;
-@property (nonatomic, weak) GBCardViewController                    *rightCard;
-@property (nonatomic, weak) GBCardViewController                    *topCard;
-@property (nonatomic, weak) GBCardViewController                    *bottomCard;
-@property (nonatomic) BOOL                                          lock;
-@property (nonatomic) BOOL                                          isPanning;
+@property (strong, nonatomic) GBCardViewController                  *mainCard;
+@property (strong, nonatomic) GBCardViewController                  *leftCard;
+@property (strong, nonatomic) GBCardViewController                  *rightCard;
+@property (strong, nonatomic) GBCardViewController                  *topCard;
+@property (strong, nonatomic) GBCardViewController                  *bottomCard;
+@property (assign, nonatomic) BOOL                                  lock;
+
+@property (strong, nonatomic, readonly) NSMutableArray              *cards;
+@property (strong, nonatomic, readonly) GBCardViewController        *currentCard;
+@property (assign, nonatomic, readonly) BOOL                        isPanning;
 
 -(void)slideCard:(GBCardViewCardIdentifier)targetCardId animated:(BOOL)animated;
 -(void)restoreMainCardWithAnimation:(BOOL)animation;
-
-+(NSString *)stringForCardId:(GBCardViewCardIdentifier)cardId;
 
 @end

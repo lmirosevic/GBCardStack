@@ -39,6 +39,7 @@ const double GBVerticalAutoSlideSpeed = 950;
 @property (assign, nonatomic) BOOL                                  busy;
 @property (assign, nonatomic) CGPoint                               originCopy;
 @property (strong, nonatomic) UIView                                *maskView;
+@property (assign, nonatomic, readwrite) BOOL                       isPanning;
 
 @end
 

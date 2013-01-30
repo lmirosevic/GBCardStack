@@ -3,6 +3,10 @@ GBCardStack
 
 Sliding card UI paradigm for iOS. Currently used by "VLC iRemote" on the App Store.
 
+![Left view](http://luka.s3.amazonaws.com/GBCardStackLeft.png)
+![Main view](http://luka.s3.amazonaws.com/GBCardStackMain.png)
+![Right view](http://luka.s3.amazonaws.com/GBCardStackRight.png)
+
 Similar to the "sliding main view" in the Facebook and Path apps, except it supports all 4 directions, manages autohiding properly, supports sliding by: pan gesture, tap gesture and programatically.
 
 https://itunes.apple.com/us/app/vlc-iremote-lite-remote-control/id509476881?ls=1&mt=8

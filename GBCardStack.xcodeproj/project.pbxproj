@@ -27,6 +27,13 @@
 			remoteGlobalIDString = 8A0C4E34165FA60C00A990FB;
 			remoteInfo = GBToolboxUnitTests;
 		};
+		8A7D641C16B95A1B00D6C676 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AD911B0162D9E2200C9D287;
+			remoteInfo = GBToolbox;
+		};
 		8AF687DD16B8062400FEF6A7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8AF687D516B8062400FEF6A7 /* GBAnalytics.xcodeproj */;
@@ -166,6 +173,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				8A7D641D16B95A1B00D6C676 /* PBXTargetDependency */,
 			);
 			name = GBCardStack;
 			productName = GBCardStack;
@@ -243,6 +251,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8A7D641D16B95A1B00D6C676 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GBToolbox;
+			targetProxy = 8A7D641C16B95A1B00D6C676 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		8A01EE3116B2CEF4006E7EA2 /* Debug */ = {

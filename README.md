@@ -25,7 +25,7 @@ TopViewController *topViewController = [[TopViewController alloc] initWithNibNam
 RightViewController *rightViewController = [[RightViewController alloc] initWithNibName:@"RightViewController" bundle:nil];
 ```
 
-Create a GBCardStackController instance and add the *cards* to it:
+Create a `GBCardStackController` instance and add the *cards* to it:
 
 ```objective-c
 GBCardStackController *cardStackController = [[GBCardStackController alloc] init];
@@ -62,6 +62,10 @@ Static libraries (Add dependency, link, -ObjC linker flag, header search path in
 * GBToolbox
 * GBAnalytics
 
+3rd party frameworks included (make sure project framework search path is correctly set, that framework is added to project as relative link, linked against in build phases of superproject):
+
+* BugSense-iOS
+
 System Frameworks (link them in):
 
 * CoreGraphics
@@ -80,13 +84,3 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
-
-    
-
-
-
-
-
-
-

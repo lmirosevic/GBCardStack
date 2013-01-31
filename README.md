@@ -54,15 +54,15 @@ In your view controllers which you place in the card stack, define which views a
 Demo project
 ------------
 
-See: www.github.com/lmirosevic/GBCardStackDemo
+See: [github.com/lmirosevic/GBCardStackDemo](https://github.com/lmirosevic/GBCardStackDemo)
 
 Dependencies
 ------------
 
 Static libraries (Add dependency, link, -ObjC linker flag, header search path in superproject):
 
-* GBToolbox
-* GBAnalytics
+* [GBToolbox](https://github.com/lmirosevic/GBToolbox)
+* [GBAnalytics](https:/github.com/lmirosevic/GBAnalytics)
 
 3rd party frameworks included (make sure project framework search path is correctly set, that framework is added to project as relative link, linked against in build phases of superproject):
 

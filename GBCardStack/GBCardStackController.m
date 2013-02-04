@@ -313,7 +313,7 @@ const double GBVerticalAutoSlideSpeed = 950;
                 }
             }
         }
-        else if (self.panDirection == GBGestureHorizontalPan) {
+        else {
             //leftcard domain
             if (newFrame.origin.x >= 0) {
                 targetOrigin = CGPointMake(self.currentCard.view.frame.size.width-GBHorizontalCardOverlapDistance, self.currentCard.view.frame.origin.y);

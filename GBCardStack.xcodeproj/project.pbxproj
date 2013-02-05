@@ -34,6 +34,20 @@
 			remoteGlobalIDString = 8AD911B0162D9E2200C9D287;
 			remoteInfo = GBToolbox;
 		};
+		8ACE94BB16C125BD00527E0D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8AF687D516B8062400FEF6A7 /* GBAnalytics.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8A45A82216B7C2C100414137;
+			remoteInfo = GBAnalytics;
+		};
+		8ACE94C016C125BD00527E0D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A0377FB16BFCD2F0096C448;
+			remoteInfo = "GBToolbox-OSX";
+		};
 		8AF687DD16B8062400FEF6A7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8AF687D516B8062400FEF6A7 /* GBAnalytics.xcodeproj */;
@@ -147,6 +161,7 @@
 			children = (
 				8A01EE7D16B2D15B006E7EA2 /* libGBToolbox.a */,
 				8A01EE7F16B2D15B006E7EA2 /* GBToolboxUnitTests.octest */,
+				8ACE94C116C125BD00527E0D /* GBToolbox.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -173,6 +188,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				8ACE94BC16C125BD00527E0D /* PBXTargetDependency */,
 				8A7D641D16B95A1B00D6C676 /* PBXTargetDependency */,
 			);
 			name = GBCardStack;
@@ -231,6 +247,13 @@
 			remoteRef = 8A01EE7E16B2D15B006E7EA2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		8ACE94C116C125BD00527E0D /* GBToolbox.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GBToolbox.framework;
+			remoteRef = 8ACE94C016C125BD00527E0D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		8AF687DE16B8062400FEF6A7 /* libGBAnalytics.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -257,6 +280,11 @@
 			isa = PBXTargetDependency;
 			name = GBToolbox;
 			targetProxy = 8A7D641C16B95A1B00D6C676 /* PBXContainerItemProxy */;
+		};
+		8ACE94BC16C125BD00527E0D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GBAnalytics;
+			targetProxy = 8ACE94BB16C125BD00527E0D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

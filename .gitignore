@@ -1,6 +1,3 @@
-Screenshots
-
-
 #########################
 # .gitignore file for Xcode4 / OS X Source projects
 #
@@ -11,6 +8,11 @@ Screenshots
 #
 # For updates, see: http://stackoverflow.com/questions/49478/git-ignore-file-for-xcode-projects
 #########################
+
+##### 
+# Cocoapods ignores, don't need this folder because it's big and can be regenerated at any time
+
+Pods
 
 #####
 # OS X temporary files that should never be committed
@@ -69,8 +71,9 @@ build/
 # You can safely ignore the xcuserdata files - but do NOT ignore the files next to them
 #
 
-xcuserdata
-#UserInterfaceState.xcuserstate
+UserInterfaceState.xcuserstate
+WorkspaceSettings.xcsettings
+xcdebugger
 
 ####
 # XCode 4 workspaces - more detailed

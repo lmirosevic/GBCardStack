@@ -78,6 +78,7 @@
 		8A01EE3816B2CF0E006E7EA2 /* UIViewController+GBCardStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+GBCardStack.h"; sourceTree = "<group>"; };
 		8A01EE3916B2CF0E006E7EA2 /* UIViewController+GBCardStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+GBCardStack.m"; sourceTree = "<group>"; };
 		8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GBToolbox.xcodeproj; path = ../GBToolbox/GBToolbox.xcodeproj; sourceTree = "<group>"; };
+		8ABC465419CC4E49004A3984 /* GBCardStack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GBCardStack.h; sourceTree = "<group>"; };
 		8AF687D516B8062400FEF6A7 /* GBAnalytics.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GBAnalytics.xcodeproj; path = ../GBAnalytics/GBAnalytics.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -139,6 +140,7 @@
 		8A01EE3C16B2CF12006E7EA2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				8ABC465419CC4E49004A3984 /* GBCardStack.h */,
 				8A01EE3616B2CF0E006E7EA2 /* GBCardStackController.h */,
 				8A01EE3716B2CF0E006E7EA2 /* GBCardStackController.m */,
 				8A01EE3816B2CF0E006E7EA2 /* UIViewController+GBCardStack.h */,
@@ -243,7 +245,7 @@
 		8A01EE7F16B2D15B006E7EA2 /* GBToolboxUnitTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = GBToolboxUnitTests.octest;
+			path = "GBToolboxUnitTests-iOS.octest";
 			remoteRef = 8A01EE7E16B2D15B006E7EA2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};

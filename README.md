@@ -1,5 +1,4 @@
-GBCardStack
-============
+# GBCardStack ![Version](https://img.shields.io/cocoapods/v/GBCardStack.svg?style=flat)&nbsp;![License](https://img.shields.io/badge/license-Apache_2-green.svg?style=flat)
 
 Sliding card UI paradigm for iOS. Currently used by [VLC iRemote](http://www.goonbee.com/apps/vlc-remote) on the [App Store](http://itunes.apple.com/us/app/vlc-remote-hd/id507404442?ls=1&mt=8).
 

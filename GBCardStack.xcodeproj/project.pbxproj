@@ -7,55 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4AE9D2594E0C4E77A7E91912 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26675A9A6A8145B5A2500E51 /* libPods.a */; };
 		8A01EE2916B2CEF4006E7EA2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A01EE2816B2CEF4006E7EA2 /* Foundation.framework */; };
 		8A01EE3A16B2CF0E006E7EA2 /* GBCardStackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A01EE3716B2CF0E006E7EA2 /* GBCardStackController.m */; };
 		8A01EE3B16B2CF0E006E7EA2 /* UIViewController+GBCardStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A01EE3916B2CF0E006E7EA2 /* UIViewController+GBCardStack.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		8A01EE7C16B2D15B006E7EA2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8AD911B1162D9E2200C9D287;
-			remoteInfo = GBToolbox;
-		};
-		8A01EE7E16B2D15B006E7EA2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8A0C4E34165FA60C00A990FB;
-			remoteInfo = GBToolboxUnitTests;
-		};
-		8A7D641C16B95A1B00D6C676 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 8AD911B0162D9E2200C9D287;
-			remoteInfo = GBToolbox;
-		};
-		8ACE94BB16C125BD00527E0D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8AF687D516B8062400FEF6A7 /* GBAnalytics.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 8A45A82216B7C2C100414137;
-			remoteInfo = GBAnalytics;
-		};
-		8ACE94C016C125BD00527E0D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8A0377FB16BFCD2F0096C448;
-			remoteInfo = "GBToolbox-OSX";
-		};
-		8AF687DD16B8062400FEF6A7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8AF687D516B8062400FEF6A7 /* GBAnalytics.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8A45A82316B7C2C100414137;
-			remoteInfo = GBAnalytics;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		8A01EE2316B2CEF4006E7EA2 /* CopyFiles */ = {
@@ -70,6 +26,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		26675A9A6A8145B5A2500E51 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A01EE2516B2CEF4006E7EA2 /* libGBCardStack.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGBCardStack.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A01EE2816B2CEF4006E7EA2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8A01EE2C16B2CEF4006E7EA2 /* GBCardStack-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GBCardStack-Prefix.pch"; sourceTree = "<group>"; };
@@ -77,9 +34,8 @@
 		8A01EE3716B2CF0E006E7EA2 /* GBCardStackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBCardStackController.m; sourceTree = "<group>"; };
 		8A01EE3816B2CF0E006E7EA2 /* UIViewController+GBCardStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+GBCardStack.h"; sourceTree = "<group>"; };
 		8A01EE3916B2CF0E006E7EA2 /* UIViewController+GBCardStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+GBCardStack.m"; sourceTree = "<group>"; };
-		8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GBToolbox.xcodeproj; path = ../GBToolbox/GBToolbox.xcodeproj; sourceTree = "<group>"; };
 		8ABC465419CC4E49004A3984 /* GBCardStack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GBCardStack.h; sourceTree = "<group>"; };
-		8AF687D516B8062400FEF6A7 /* GBAnalytics.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GBAnalytics.xcodeproj; path = ../GBAnalytics/GBAnalytics.xcodeproj; sourceTree = "<group>"; };
+		9CF77E6095A8450EAB736965 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A01EE2916B2CEF4006E7EA2 /* Foundation.framework in Frameworks */,
+				4AE9D2594E0C4E77A7E91912 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,10 +54,10 @@
 		8A01EE1A16B2CEF4006E7EA2 = {
 			isa = PBXGroup;
 			children = (
-				8A01EE7216B2D141006E7EA2 /* Libraries */,
 				8A01EE2A16B2CEF4006E7EA2 /* GBCardStack */,
 				8A01EE2716B2CEF4006E7EA2 /* Frameworks */,
 				8A01EE2616B2CEF4006E7EA2 /* Products */,
+				9CF77E6095A8450EAB736965 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -116,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				8A01EE2816B2CEF4006E7EA2 /* Foundation.framework */,
+				26675A9A6A8145B5A2500E51 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -123,7 +81,11 @@
 		8A01EE2A16B2CEF4006E7EA2 /* GBCardStack */ = {
 			isa = PBXGroup;
 			children = (
-				8A01EE3C16B2CF12006E7EA2 /* Source */,
+				8ABC465419CC4E49004A3984 /* GBCardStack.h */,
+				8A01EE3616B2CF0E006E7EA2 /* GBCardStackController.h */,
+				8A01EE3716B2CF0E006E7EA2 /* GBCardStackController.m */,
+				8A01EE3816B2CF0E006E7EA2 /* UIViewController+GBCardStack.h */,
+				8A01EE3916B2CF0E006E7EA2 /* UIViewController+GBCardStack.m */,
 				8A01EE2B16B2CEF4006E7EA2 /* Supporting Files */,
 			);
 			path = GBCardStack;
@@ -137,45 +99,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		8A01EE3C16B2CF12006E7EA2 /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				8ABC465419CC4E49004A3984 /* GBCardStack.h */,
-				8A01EE3616B2CF0E006E7EA2 /* GBCardStackController.h */,
-				8A01EE3716B2CF0E006E7EA2 /* GBCardStackController.m */,
-				8A01EE3816B2CF0E006E7EA2 /* UIViewController+GBCardStack.h */,
-				8A01EE3916B2CF0E006E7EA2 /* UIViewController+GBCardStack.m */,
-			);
-			name = Source;
-			sourceTree = "<group>";
-		};
-		8A01EE7216B2D141006E7EA2 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-				8AF687D516B8062400FEF6A7 /* GBAnalytics.xcodeproj */,
-				8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */,
-			);
-			name = Libraries;
-			sourceTree = "<group>";
-		};
-		8A01EE7516B2D15B006E7EA2 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				8A01EE7D16B2D15B006E7EA2 /* libGBToolbox.a */,
-				8A01EE7F16B2D15B006E7EA2 /* GBToolboxUnitTests.octest */,
-				8ACE94C116C125BD00527E0D /* GBToolbox.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		8AF687D616B8062400FEF6A7 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				8AF687DE16B8062400FEF6A7 /* libGBAnalytics.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -183,15 +106,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8A01EE3316B2CEF4006E7EA2 /* Build configuration list for PBXNativeTarget "GBCardStack" */;
 			buildPhases = (
+				797EA3AE38CA41A0970E0428 /* Check Pods Manifest.lock */,
 				8A01EE2116B2CEF4006E7EA2 /* Sources */,
 				8A01EE2216B2CEF4006E7EA2 /* Frameworks */,
 				8A01EE2316B2CEF4006E7EA2 /* CopyFiles */,
+				090BD9CA28E1470B8D576CBC /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				8ACE94BC16C125BD00527E0D /* PBXTargetDependency */,
-				8A7D641D16B95A1B00D6C676 /* PBXTargetDependency */,
 			);
 			name = GBCardStack;
 			productName = GBCardStack;
@@ -204,7 +127,7 @@
 		8A01EE1C16B2CEF4006E7EA2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Goonbee;
 			};
 			buildConfigurationList = 8A01EE1F16B2CEF4006E7EA2 /* Build configuration list for PBXProject "GBCardStack" */;
@@ -217,16 +140,6 @@
 			mainGroup = 8A01EE1A16B2CEF4006E7EA2;
 			productRefGroup = 8A01EE2616B2CEF4006E7EA2 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 8AF687D616B8062400FEF6A7 /* Products */;
-					ProjectRef = 8AF687D516B8062400FEF6A7 /* GBAnalytics.xcodeproj */;
-				},
-				{
-					ProductGroup = 8A01EE7516B2D15B006E7EA2 /* Products */;
-					ProjectRef = 8A01EE7416B2D15B006E7EA2 /* GBToolbox.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				8A01EE2416B2CEF4006E7EA2 /* GBCardStack */,
@@ -234,36 +147,38 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXReferenceProxy section */
-		8A01EE7D16B2D15B006E7EA2 /* libGBToolbox.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libGBToolbox.a;
-			remoteRef = 8A01EE7C16B2D15B006E7EA2 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
+/* Begin PBXShellScriptBuildPhase section */
+		090BD9CA28E1470B8D576CBC /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
-		8A01EE7F16B2D15B006E7EA2 /* GBToolboxUnitTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "GBToolboxUnitTests-iOS.octest";
-			remoteRef = 8A01EE7E16B2D15B006E7EA2 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
+		797EA3AE38CA41A0970E0428 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
-		8ACE94C116C125BD00527E0D /* GBToolbox.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = GBToolbox.framework;
-			remoteRef = 8ACE94C016C125BD00527E0D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8AF687DE16B8062400FEF6A7 /* libGBAnalytics.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libGBAnalytics.a;
-			remoteRef = 8AF687DD16B8062400FEF6A7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8A01EE2116B2CEF4006E7EA2 /* Sources */ = {
@@ -276,19 +191,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		8A7D641D16B95A1B00D6C676 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GBToolbox;
-			targetProxy = 8A7D641C16B95A1B00D6C676 /* PBXContainerItemProxy */;
-		};
-		8ACE94BC16C125BD00527E0D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GBAnalytics;
-			targetProxy = 8ACE94BB16C125BD00527E0D /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		8A01EE3116B2CEF4006E7EA2 /* Debug */ = {
@@ -347,11 +249,11 @@
 		};
 		8A01EE3416B2CEF4006E7EA2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9CF77E6095A8450EAB736965 /* Pods.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/GBCardStack.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GBCardStack/GBCardStack-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -359,11 +261,11 @@
 		};
 		8A01EE3516B2CEF4006E7EA2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9CF77E6095A8450EAB736965 /* Pods.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/GBCardStack.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GBCardStack/GBCardStack-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

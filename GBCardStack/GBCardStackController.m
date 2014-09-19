@@ -53,7 +53,7 @@ const double GBVerticalAutoSlideSpeed = 950;
             
             //Flurry
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:self.currentCardId], @"source", [GBCardStackController stringForCardId:targetCardId], @"destination", @"programmatic", @"type", nil];
-            _td(@"GBCardStack: Slide card", dict);
+            _tp(@"GBCardStack: Slide card", dict);
             
             
             self.busy = YES;
@@ -168,7 +168,7 @@ const double GBVerticalAutoSlideSpeed = 950;
         
         //Flurry
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:bottomCardId], @"source", [GBCardStackController stringForCardId:GBCardViewMainCard], @"destination", @"programmatic2", @"type", nil];
-        _td(@"GBCardStack: Slide card", dict);
+        _tp(@"GBCardStack: Slide card", dict);
         
         
         if (animation) {
@@ -442,7 +442,7 @@ const double GBVerticalAutoSlideSpeed = 950;
                     
                     //Flurry
                     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:self.currentCardId], @"source", [GBCardStackController stringForCardId:targetCardId], @"destination", @"pan", @"type", nil];
-                    _td(@"GBCardStack: Slide card", dict);
+                    _tp(@"GBCardStack: Slide card", dict);
                     
                     self.currentCardId = targetCardId;
                     self.tapGestureRecognizer.enabled = YES;
@@ -452,7 +452,7 @@ const double GBVerticalAutoSlideSpeed = 950;
                     
                     //Flurry
                     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:self.currentCardId], @"source", [GBCardStackController stringForCardId:GBCardViewMainCard], @"destination", @"pan", @"type", nil];
-                    _td(@"GBCardStack: Slide card", dict);
+                    _tp(@"GBCardStack: Slide card", dict);
                     
                     
                     //unload existing card
@@ -482,7 +482,7 @@ const double GBVerticalAutoSlideSpeed = 950;
             if ((self.currentCardId != GBCardViewMainCard) && (!self.busy)) {
                 //Flurry
                 NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:self.currentCardId], @"source", [GBCardStackController stringForCardId:GBCardViewMainCard], @"destination", @"tap on edge", @"type", nil];
-                _td(@"GBCardStack: Slide card", dict);
+                _tp(@"GBCardStack: Slide card", dict);
                 
                 
                 [self restoreMainCardWithAnimation:YES];

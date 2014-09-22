@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name                   = 'GBCardStack'
-  s.version                = '1.0.0'
+  s.version                = '1.0.1'
   s.summary                = 'iOS UI paradigm for a stack of sliding cards.'
   s.homepage               = 'https://github.com/lmirosevic/GBCardStack'
   s.license                = 'Apache License, Version 2.0'

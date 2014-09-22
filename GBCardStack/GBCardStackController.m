@@ -93,7 +93,7 @@ const double GBVerticalAutoSlideSpeed = 950;
                 
                 self.mainCardUserInteraction = NO;
                 
-                [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationCurveEaseInOut animations:^{
+                [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                     //animate top card sliding over
                     self.mainCard.view.frame = CGRectMake(topCardDestinationOrigin.x, topCardDestinationOrigin.y, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
                 } completion:^(BOOL finished) {
@@ -181,7 +181,7 @@ const double GBVerticalAutoSlideSpeed = 950;
                 animationDuration = distanceToHome/GBVerticalMinimumAutoSlideSpeed;
             }
             
-            [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationCurveEaseInOut animations:^{
+            [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.mainCard.view.frame = CGRectMake(0, 0, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
             } completion:^(BOOL finished) {
                 [[self cardWithIdentifier:bottomCardId].view removeFromSuperview];
@@ -222,7 +222,7 @@ const double GBVerticalAutoSlideSpeed = 950;
                 animationDuration = (self.currentCard.view.frame.size.width-GBHorizontalCardOverlapDistance)/GBHorizontalAutoSlideSpeed;
             }
             
-            [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationCurveEaseInOut animations:^{
+            [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.mainCard.view.frame = CGRectMake(0, 0, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
             } completion:^(BOOL finished) {
                 [self.currentCard.view removeFromSuperview];
@@ -424,7 +424,7 @@ const double GBVerticalAutoSlideSpeed = 950;
             NSTimeInterval animationDuration = distanceRemaining/targetSpeed;
                     
             //commit animations
-            [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationCurveEaseOut animations:^{
+            [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.panGestureRecognizer.enabled = NO;
                 self.busy = YES;
                 

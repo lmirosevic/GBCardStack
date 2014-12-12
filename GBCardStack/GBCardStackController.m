@@ -17,11 +17,11 @@ static double const CardOverlapDistanceVertical =                   52;// the di
 
 // magic numbers for the animations
 static double const HorizontalMinimumAutoSlideSpeed =               500;
-static double const HorizontalMaximumAutoSlideSpeed =               1200;
-static double const HorizontalAutoSlideSpeed =                      800;
+static double const HorizontalMaximumAutoSlideSpeed =               1400;
+static double const HorizontalAutoSlideSpeed =                      1000;
 static double const VerticalMinimumAutoSlideSpeed =                 700;
-static double const VerticalMaximumAutoSlideSpeed =                 1700;
-static double const VerticalAutoSlideSpeed =                        950;
+static double const VerticalMaximumAutoSlideSpeed =                 1800;
+static double const VerticalAutoSlideSpeed =                        1700;
 
 #define kDefaultShadowColor                                         [UIColor blackColor]
 static CGFloat const kDefaultShadowRadius =                         16;

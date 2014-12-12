@@ -10,18 +10,13 @@
 
 #import "UIViewController+GBCardStack.h"
 
-typedef enum {
-    GBCardViewMainCard = 0,
-    GBCardViewLeftCard,
-    GBCardViewRightCard,
-    GBCardViewTopCard,
-    GBCardViewBottomCard,
-} GBCardViewCardIdentifier;
-
-typedef enum {
-    GBGestureHorizontalPan = 0,
-    GBGestureVerticalPan,
-} GBGesturePanDirection;
+typedef NS_ENUM(NSUInteger, GBCardStackCardType) {
+    GBCardStackCardTypeMain = 0,
+    GBCardStackCardTypeLeft,
+    GBCardStackCardTypeRight,
+    GBCardStackCardTypeTop,
+    GBCardStackCardTypeBottom,
+};
 
 @interface GBCardStackController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -36,7 +31,7 @@ typedef enum {
 @property (strong, nonatomic, readonly) UIViewController            *currentCard;
 @property (assign, nonatomic, readonly) BOOL                        isPanning;
 
--(void)slideCard:(GBCardViewCardIdentifier)targetCardId animated:(BOOL)animated;
--(void)restoreMainCardWithAnimation:(BOOL)animation;
+- (void)showCard:(GBCardStackCardType)targetCardId animated:(BOOL)animated;
+- (void)restoreMainCardAnimated:(BOOL)animated;
 
 @end

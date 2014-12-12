@@ -10,8 +10,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-#import "GBToolbox.h"
-#import "GBAnalytics.h"
+#import <GBToolbox/GBToolbox.h>
 
 static double const CardOverlapDistanceHorizontal =                 56;// the distance that the main card covers the card below in case of left and right cards
 static double const CardOverlapDistanceVertical =                   52;// the distance that the main card covers the card below in case of top and bottom cards
@@ -57,8 +56,11 @@ typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
 
 #pragma mark - Card Stack interactions
 
-//when I add a card to the hierarchy, I should make its width and height equal to the container, and these constraints will never change
-//when I animate the top card, I should lock the dimension in which I'm not animation, and set the constraint on the correct side depending on the animation
+- (void)_notifyDelegateWithDestination:(GBCardStackCardType)destination source:(GBCardStackCardType)source transitionType:(GBCardStackCardTransitionType)transitionType {
+    if ([self.delegate respondsToSelector:@selector(GBCardStackController:didShowCard:fromPreviouslyShownCard:type:)]) {
+        [self.delegate GBCardStackController:self didShowCard:destination fromPreviouslyShownCard:source type:transitionType];
+    }
+}
 
 - (void)showCard:(GBCardStackCardType)targetCardId animated:(BOOL)animated {
     if (targetCardId == GBCardStackCardTypeMain) {
@@ -68,9 +70,8 @@ typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
         if ((self.currentCardId == GBCardStackCardTypeMain) && ([self _cardWithIdentifier:targetCardId])) {
             self.busy = YES;
             
-            //Flurry
-            NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController _stringForCardId:self.currentCardId], @"source", [GBCardStackController _stringForCardId:targetCardId], @"destination", @"programmatic", @"type", nil];
-            _tp(@"GBCardStack: Slide card", dict);
+            // notify delegate
+            [self _notifyDelegateWithDestination:targetCardId source:self.currentCardId transitionType:GBCardStackCardTransitionTypeProgrammatic];
 
             CGVector offset = [self _targetOffsetForMainCardToShowCard:targetCardId];
             
@@ -131,7 +132,7 @@ typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
         self.busy = YES;
         
         //find which card is underneath
-        GBCardStackCardType bottomCardId;
+        GBCardStackCardType lowerCardId;
         
         //find out distance to home base
         CGFloat distanceToHome;
@@ -141,10 +142,10 @@ typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
             // find out if its left or right
             CGFloat x = self.lastOffset.dx;
             if (x >= 0) {
-                bottomCardId = GBCardStackCardTypeLeft;
+                lowerCardId = GBCardStackCardTypeLeft;
             }
             else {
-                bottomCardId = GBCardStackCardTypeRight;
+                lowerCardId = GBCardStackCardTypeRight;
             }
             
             distanceToHome = fabs(x);
@@ -153,10 +154,10 @@ typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
             // find out it its up or down
             CGFloat y = self.lastOffset.dy;
             if (y >= 0) {
-                bottomCardId = GBCardStackCardTypeTop;
+                lowerCardId = GBCardStackCardTypeTop;
             }
             else {
-                bottomCardId = GBCardStackCardTypeBottom;
+                lowerCardId = GBCardStackCardTypeBottom;
             }
             
             distanceToHome = fabs(y);
@@ -165,10 +166,8 @@ typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
             return;
         }
         
-        
-        //Flurry
-        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController _stringForCardId:bottomCardId], @"source", [GBCardStackController _stringForCardId:GBCardStackCardTypeMain], @"destination", @"programmatic2", @"type", nil];
-        _tp(@"GBCardStack: Slide card", dict);
+        // notify delegate
+        [self _notifyDelegateWithDestination:GBCardStackCardTypeMain source:lowerCardId transitionType:GBCardStackCardTransitionTypeProgrammatic];
         
         if (animated) {
             //calculate animation duration
@@ -186,7 +185,7 @@ typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
                 self.mainCardOffset = CGVectorMake(0., 0.);
                 [self.mainCard.view layoutIfNeeded];
             } completion:^(BOOL finished) {
-                RemoveChildViewController([self _cardWithIdentifier:bottomCardId]);
+                RemoveChildViewController([self _cardWithIdentifier:lowerCardId]);
                 self.currentCardId = GBCardStackCardTypeMain;
                 self.tapGestureRecognizer.enabled = NO;
                 self.mainCardUserInteraction = YES;
@@ -199,7 +198,7 @@ typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
             // update the constraints
             self.mainCardOffset = CGVectorMake(0., 0.);
             
-            RemoveChildViewController([self _cardWithIdentifier:bottomCardId]);
+            RemoveChildViewController([self _cardWithIdentifier:lowerCardId]);
             self.currentCardId = GBCardStackCardTypeMain;
             self.tapGestureRecognizer.enabled = NO;
             self.mainCardUserInteraction = YES;
@@ -430,20 +429,16 @@ typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
             } completion:^(BOOL finished) {
                 // set current card id at end of animation
                 if (forward) {
-                    
-                    //Flurry
-                    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController _stringForCardId:self.currentCardId], @"source", [GBCardStackController _stringForCardId:targetCardId], @"destination", @"pan", @"type", nil];
-                    _tp(@"GBCardStack: Slide card", dict);
+                    // notify delegate
+                    [self _notifyDelegateWithDestination:targetCardId source:self.currentCardId transitionType:GBCardStackCardTransitionTypePan];
                     
                     self.currentCardId = targetCardId;
                     self.tapGestureRecognizer.enabled = YES;
                     self.mainCardUserInteraction = NO;
                 }
                 else {
-                    
-                    //Flurry
-                    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController _stringForCardId:self.currentCardId], @"source", [GBCardStackController _stringForCardId:GBCardStackCardTypeMain], @"destination", @"pan", @"type", nil];
-                    _tp(@"GBCardStack: Slide card", dict);
+                    // notify delegate
+                    [self _notifyDelegateWithDestination:GBCardStackCardTypeMain source:self.currentCardId transitionType:GBCardStackCardTransitionTypePan];
                     
                     
                     // unload existing card
@@ -471,10 +466,8 @@ typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
     if (!self.lock) {
         if (sender.state == UIGestureRecognizerStateRecognized) {
             if ((self.currentCardId != GBCardStackCardTypeMain) && (!self.busy)) {
-                //Flurry
-                NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController _stringForCardId:self.currentCardId], @"source", [GBCardStackController _stringForCardId:GBCardStackCardTypeMain], @"destination", @"tap on edge", @"type", nil];
-                _tp(@"GBCardStack: Slide card", dict);
-                
+                // notify delegate
+                [self _notifyDelegateWithDestination:GBCardStackCardTypeMain source:self.currentCardId transitionType:GBCardStackCardTransitionTypeTapOnEdge];
                 
                 [self restoreMainCardAnimated:YES];
             }
@@ -533,25 +526,6 @@ typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
             return CGVectorMake(0.,
                                 0.);
         } break;
-    }
-}
-
-+ (NSString *)_stringForCardId:(GBCardStackCardType)cardId {
-    switch (cardId) {
-        case GBCardStackCardTypeMain:
-            return @"GBCardStackCardTypeMain";
-            
-        case GBCardStackCardTypeLeft:
-            return @"GBCardStackCardTypeLeft";
-            
-        case GBCardStackCardTypeRight:
-            return @"GBCardStackCardTypeRight";
-            
-        case GBCardStackCardTypeTop:
-            return @"GBCardStackCardTypeTop";
-            
-        case GBCardStackCardTypeBottom:
-            return @"GBCardStackCardTypeBottom";
     }
 }
 

@@ -8,3 +8,4 @@
 
 #import "GBCardStackController.h"
 #import "UIViewController+GBCardStack.h"
+#import "GBCardStackAnalyticsModule.h"

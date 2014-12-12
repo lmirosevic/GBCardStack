@@ -10,94 +10,94 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-#import "GBToolbox.h"
-#import "GBAnalytics.h"
+#import <GBToolbox/GBToolbox.h>
 
-const double GBHorizontalCardOverlapDistance = 56;
-const double GBHorizontalMinimumAutoSlideSpeed = 500;
-const double GBHorizontalMaximumAutoSlideSpeed = 1200;
-const double GBHorizontalAutoSlideSpeed = 800;
+static double const CardOverlapDistanceHorizontal =                 56;// the distance that the main card covers the card below in case of left and right cards
+static double const CardOverlapDistanceVertical =                   52;// the distance that the main card covers the card below in case of top and bottom cards
 
-const double GBVerticalCardOverlapDistance = 52+20;//+20 here to compensate for status bar
-const double GBVerticalMinimumAutoSlideSpeed = 700;
-const double GBVerticalMaximumAutoSlideSpeed = 1700;
-const double GBVerticalAutoSlideSpeed = 950;
+// magic numbers for the animations
+static double const HorizontalMinimumAutoSlideSpeed =               500;
+static double const HorizontalMaximumAutoSlideSpeed =               1400;
+static double const HorizontalAutoSlideSpeed =                      1000;
+static double const VerticalMinimumAutoSlideSpeed =                 700;
+static double const VerticalMaximumAutoSlideSpeed =                 1800;
+static double const VerticalAutoSlideSpeed =                        1700;
+
+#define kDefaultShadowColor                                         [UIColor blackColor]
+static CGFloat const kDefaultShadowRadius =                         16;
+static CGFloat const kDefaultShadowOpacity =                        1;
+
+typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
+    GBGestureHorizontalPan = 0,
+    GBGestureVerticalPan,
+};
 
 @interface GBCardStackController() {
-    NSMutableArray              *_cards;
-    BOOL                        _mainCardUserInteraction;
-    UIPanGestureRecognizer      *_panGestureRecognizer;
-    UITapGestureRecognizer      *_tapGestureRecognizer;
+    NSMutableArray                                                  *_cards;
 }
 
-@property (assign, nonatomic) GBCardViewCardIdentifier              currentCardId;
+@property (assign, nonatomic) GBCardStackCardType                   currentCardId;
 @property (strong, nonatomic) UIPanGestureRecognizer                *panGestureRecognizer;
 @property (strong, nonatomic) UITapGestureRecognizer                *tapGestureRecognizer;
 @property (assign, nonatomic) BOOL                                  mainCardUserInteraction;
 @property (assign, nonatomic) GBGesturePanDirection                 panDirection;
 @property (assign, nonatomic) BOOL                                  busy;
-@property (assign, nonatomic) CGPoint                               originCopy;
+@property (assign, nonatomic) CGVector                              lastOffset;
 @property (strong, nonatomic) UIView                                *maskView;
 @property (assign, nonatomic, readwrite) BOOL                       isPanning;
 
-@end
+@property (assign, nonatomic) CGVector                              mainCardOffset;
+@property (strong, nonatomic) NSLayoutConstraint                    *horizontalConstraint;
+@property (strong, nonatomic) NSLayoutConstraint                    *verticalConstraint;
 
+@end
 
 @implementation GBCardStackController
 
 #pragma mark - Card Stack interactions
 
--(void)slideCard:(GBCardViewCardIdentifier)targetCardId animated:(BOOL)animated {
-    if (!self.busy && !self.lock) {
-        if ((self.currentCardId == GBCardViewMainCard) && ([self cardWithIdentifier:targetCardId])) {
-            
-            //Flurry
-            NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:self.currentCardId], @"source", [GBCardStackController stringForCardId:targetCardId], @"destination", @"programmatic", @"type", nil];
-            _tp(@"GBCardStack: Slide card", dict);
-            
-            
+- (void)_notifyDelegateWithDestination:(GBCardStackCardType)destination source:(GBCardStackCardType)source transitionType:(GBCardStackCardTransitionType)transitionType {
+    if ([self.delegate respondsToSelector:@selector(GBCardStackController:didShowCard:fromPreviouslyShownCard:type:)]) {
+        [self.delegate GBCardStackController:self didShowCard:destination fromPreviouslyShownCard:source type:transitionType];
+    }
+}
+
+- (void)showCard:(GBCardStackCardType)targetCardId animated:(BOOL)animated {
+    if (targetCardId == GBCardStackCardTypeMain) {
+        [self restoreMainCardAnimated:animated];
+    }
+    else if (!self.busy && !self.lock) {
+        if ((self.currentCardId == GBCardStackCardTypeMain) && ([self _cardWithIdentifier:targetCardId])) {
             self.busy = YES;
             
-            CGPoint topCardDestinationOrigin = CGPointMake(0, 0);//initialising here to make clang happy
-            switch (targetCardId) {
-                case GBCardViewLeftCard:
-                    topCardDestinationOrigin = CGPointMake(self.currentCard.view.frame.size.width-GBHorizontalCardOverlapDistance, self.currentCard.view.frame.origin.y);
-                    break;
-                case GBCardViewRightCard:
-                    topCardDestinationOrigin = CGPointMake(-self.currentCard.view.frame.size.width+GBHorizontalCardOverlapDistance, self.currentCard.view.frame.origin.y);
-                    break;
-                case GBCardViewTopCard:
-                    topCardDestinationOrigin = CGPointMake(self.currentCard.view.frame.origin.x, self.currentCard.view.frame.size.height-GBVerticalCardOverlapDistance);
-                    break;
-                case GBCardViewBottomCard:
-                    topCardDestinationOrigin = CGPointMake(self.currentCard.view.frame.origin.x, -self.currentCard.view.frame.size.height+GBVerticalCardOverlapDistance);
-                    break;
-                case GBCardViewMainCard:
-                    NSLog(@"Shouldn't animate to oneself.");
-                    break;
-            }
+            // notify delegate
+            [self _notifyDelegateWithDestination:targetCardId source:self.currentCardId transitionType:GBCardStackCardTransitionTypeProgrammatic];
+
+            CGVector offset = [self _targetOffsetForMainCardToShowCard:targetCardId];
             
             if (animated) {
-                //insert bottom card as subview
-                [self loadCard:targetCardId];
+                // insert bottom card into view hierarchy
+                [self _loadCard:targetCardId];
             
-                //calculate animation duration
+                // calculate animation duration
                 NSTimeInterval animationDuration;
                             
-                if ((targetCardId == GBCardViewTopCard) || (targetCardId == GBCardViewBottomCard)) {
-                    animationDuration = (self.currentCard.view.frame.size.height-GBVerticalCardOverlapDistance)/GBVerticalAutoSlideSpeed;
+                if ((targetCardId == GBCardStackCardTypeTop) || (targetCardId == GBCardStackCardTypeBottom)) {
+                    animationDuration = (self.view.frame.size.height-CardOverlapDistanceVertical)/VerticalAutoSlideSpeed;
                 }
                 else {
-                    animationDuration = (self.currentCard.view.frame.size.width-GBHorizontalCardOverlapDistance)/GBHorizontalAutoSlideSpeed;
+                    animationDuration = (self.view.frame.size.width-CardOverlapDistanceHorizontal)/HorizontalAutoSlideSpeed;
                 }
                 
                 self.mainCardUserInteraction = NO;
                 
+                [self.view layoutIfNeeded];
                 [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    //animate top card sliding over
-                    self.mainCard.view.frame = CGRectMake(topCardDestinationOrigin.x, topCardDestinationOrigin.y, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
+                    // animate top card sliding over
+                    self.mainCardOffset = offset;
+                    [self.mainCard.view layoutIfNeeded];
                 } completion:^(BOOL finished) {
-                    //set currentcard as new card
+                    // set current card as new card
                     self.currentCardId = targetCardId;
                     self.tapGestureRecognizer.enabled = YES;
                     
@@ -105,11 +105,13 @@ const double GBVerticalAutoSlideSpeed = 950;
                 }];
             }
             else {
-                [self loadCard:targetCardId];
+                [self _loadCard:targetCardId];
                 
                 self.mainCardUserInteraction = NO;
                 
-                self.mainCard.view.frame = CGRectMake(topCardDestinationOrigin.x, topCardDestinationOrigin.y, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
+                // update the constraints
+                self.mainCardOffset = offset;
+                
                 self.currentCardId = targetCardId;
                 self.tapGestureRecognizer.enabled = YES;
                 
@@ -122,41 +124,40 @@ const double GBVerticalAutoSlideSpeed = 950;
     }
 }
 
--(void)restoreMainCardWithAnimation:(BOOL)animation {
-    if ((self.currentCardId == GBCardViewMainCard) && !self.isPanning) {
+- (void)restoreMainCardAnimated:(BOOL)animated {
+    if ((self.currentCardId == GBCardStackCardTypeMain) && !self.isPanning) {
 //        NSLog(@"Already showing main card.");
     }
-    else if (!self.lock && self.isPanning) {
-        
-        //restore main card
+    if (!self.lock && self.isPanning) {
         self.busy = YES;
         
         //find which card is underneath
-        GBCardViewCardIdentifier bottomCardId;
+        GBCardStackCardType lowerCardId;
         
         //find out distance to home base
         CGFloat distanceToHome;
         
         //if its horizontal
         if (self.panDirection == GBGestureHorizontalPan) {
-            //find out if its left or right
-            CGFloat x = self.originCopy.x;
+            // find out if its left or right
+            CGFloat x = self.lastOffset.dx;
             if (x >= 0) {
-                bottomCardId = GBCardViewLeftCard;
+                lowerCardId = GBCardStackCardTypeLeft;
             }
             else {
-                bottomCardId = GBCardViewRightCard;
+                lowerCardId = GBCardStackCardTypeRight;
             }
             
             distanceToHome = fabs(x);
         }
         else if (self.panDirection == GBGestureVerticalPan) {
-            CGFloat y = self.originCopy.y;
+            // find out it its up or down
+            CGFloat y = self.lastOffset.dy;
             if (y >= 0) {
-                bottomCardId = GBCardViewTopCard;
+                lowerCardId = GBCardStackCardTypeTop;
             }
             else {
-                bottomCardId = GBCardViewBottomCard;
+                lowerCardId = GBCardStackCardTypeBottom;
             }
             
             distanceToHome = fabs(y);
@@ -165,91 +166,90 @@ const double GBVerticalAutoSlideSpeed = 950;
             return;
         }
         
+        // notify delegate
+        [self _notifyDelegateWithDestination:GBCardStackCardTypeMain source:lowerCardId transitionType:GBCardStackCardTransitionTypeProgrammatic];
         
-        //Flurry
-        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:bottomCardId], @"source", [GBCardStackController stringForCardId:GBCardViewMainCard], @"destination", @"programmatic2", @"type", nil];
-        _tp(@"GBCardStack: Slide card", dict);
-        
-        
-        if (animation) {
+        if (animated) {
             //calculate animation duration
             NSTimeInterval animationDuration;
             if (self.panDirection == GBGestureHorizontalPan) {
-                animationDuration = distanceToHome/GBHorizontalMinimumAutoSlideSpeed;
+                animationDuration = distanceToHome/HorizontalMinimumAutoSlideSpeed;
             }
             else {
-                animationDuration = distanceToHome/GBVerticalMinimumAutoSlideSpeed;
+                animationDuration = distanceToHome/VerticalMinimumAutoSlideSpeed;
             }
             
+            [self.view layoutIfNeeded];
             [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.mainCard.view.frame = CGRectMake(0, 0, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
+                // animate top card sliding over
+                self.mainCardOffset = CGVectorMake(0., 0.);
+                [self.mainCard.view layoutIfNeeded];
             } completion:^(BOOL finished) {
-                [[self cardWithIdentifier:bottomCardId].view removeFromSuperview];
-                self.currentCardId = GBCardViewMainCard;
+                RemoveChildViewController([self _cardWithIdentifier:lowerCardId]);
+                self.currentCardId = GBCardStackCardTypeMain;
                 self.tapGestureRecognizer.enabled = NO;
                 self.mainCardUserInteraction = YES;
-                
-                self.busy = NO;
-                
-                //restart gesturerecognizer
                 self.panGestureRecognizer.enabled = NO;
                 self.panGestureRecognizer.enabled = YES;
+                self.busy = NO;
             }];
         }
         else {
-            self.mainCard.view.frame = CGRectMake(0, 0, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
-            [[self cardWithIdentifier:bottomCardId].view removeFromSuperview];
-            self.currentCardId = GBCardViewMainCard;
+            // update the constraints
+            self.mainCardOffset = CGVectorMake(0., 0.);
+            
+            RemoveChildViewController([self _cardWithIdentifier:lowerCardId]);
+            self.currentCardId = GBCardStackCardTypeMain;
             self.tapGestureRecognizer.enabled = NO;
             self.mainCardUserInteraction = YES;
-            
-            self.busy = NO;
             self.panGestureRecognizer.enabled = NO;
             self.panGestureRecognizer.enabled = YES;
+            self.busy = NO;
         }   
     }
     else if (!self.lock && !self.busy) {
         //restore main card
         self.busy = YES;
         
-        if (animation) {
-            //calculate animation duration
+        if (animated) {
+            // calculate animation duration
             NSTimeInterval animationDuration;
-            if ((self.currentCardId == GBCardViewTopCard) || (self.currentCardId == GBCardViewBottomCard)) {
-                animationDuration = (self.currentCard.view.frame.size.height-GBVerticalCardOverlapDistance)/GBVerticalAutoSlideSpeed;
+            if ((self.currentCardId == GBCardStackCardTypeTop) || (self.currentCardId == GBCardStackCardTypeBottom)) {
+                animationDuration = (self.view.frame.size.height-CardOverlapDistanceVertical)/VerticalAutoSlideSpeed;
             }
             else {
-                animationDuration = (self.currentCard.view.frame.size.width-GBHorizontalCardOverlapDistance)/GBHorizontalAutoSlideSpeed;
+                animationDuration = (self.view.frame.size.width-CardOverlapDistanceHorizontal)/HorizontalAutoSlideSpeed;
             }
             
+            [self.view layoutIfNeeded];
             [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.mainCard.view.frame = CGRectMake(0, 0, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
+                // animate top card sliding over
+                self.mainCardOffset = CGVectorMake(0., 0.);
+                [self.mainCard.view layoutIfNeeded];
             } completion:^(BOOL finished) {
-                [self.currentCard.view removeFromSuperview];
-                self.currentCardId = GBCardViewMainCard;
+                RemoveChildViewController(self.currentCard);
+                self.currentCardId = GBCardStackCardTypeMain;
                 self.tapGestureRecognizer.enabled = NO;
                 self.mainCardUserInteraction = YES;
-                
                 self.busy = NO;
             }];
         }
         else {
-            self.mainCard.view.frame = CGRectMake(0, 0, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
+            // update the constraints
+            self.mainCardOffset = CGVectorMake(0., 0.);
             
-            [self.currentCard.view removeFromSuperview];
-            self.currentCardId = GBCardViewMainCard;
+            RemoveChildViewController(self.currentCard);
+            self.currentCardId = GBCardStackCardTypeMain;
             self.tapGestureRecognizer.enabled = NO;
             self.mainCardUserInteraction = YES;
-                        
             self.busy = NO;
         }
     }
 }
 
--(void)handlePan:(UIPanGestureRecognizer *)sender {
+- (void)handlePan:(UIPanGestureRecognizer *)sender {
     if (!self.lock) {
-        
-        //manage panning state
+        // manage panning state
         if ((sender.state == UIGestureRecognizerStateBegan) || (sender.state == UIGestureRecognizerStateChanged)) {
             self.isPanning = YES;
         }
@@ -257,214 +257,200 @@ const double GBVerticalAutoSlideSpeed = 950;
             self.isPanning = NO;
         }
         
-        
         CGPoint velocity = [sender velocityInView:self.view];
         CGPoint translation = [sender translationInView:self.view];
         
-        //find out which dimension
+        // find out which dimension
         if (sender.state == UIGestureRecognizerStateBegan) {
-            //horizontal
+            // horizontal
             if (fabs(velocity.x) > fabs(velocity.y)) {
                 self.panDirection = GBGestureHorizontalPan;
             }
-            //vertical
+            // vertical
             else {            
                 self.panDirection = GBGestureVerticalPan;
             }
         }
         
-        //calculate potential newFrame for mainCard
-        CGRect newFrame = self.mainCard.view.frame;
-        
+        // calculate potential newFrame for mainCard
+        CGVector currentOffset = self.mainCardOffset;
+        CGVector newOffset = currentOffset;
         if (self.panDirection == GBGestureHorizontalPan) {
-            newFrame.origin.x += translation.x;
+            newOffset.dx += translation.x;
         }
         else if (self.panDirection == GBGestureVerticalPan) {
-            newFrame.origin.y += translation.y;
+            newOffset.dy += translation.y;
         }
         [sender setTranslation:CGPointMake(0, 0) inView:self.view];
         
-        //based on position work out target, then based on velocity work out whether to go forward or backward
-        CGPoint targetOrigin;
+        // based on position work out target, then based on velocity work out whether to go forward or backward
+        CGVector targetOffset;
         CGFloat distanceRemaining;
         CGFloat targetSpeed;
-        GBCardViewCardIdentifier targetCardId;
+        GBCardStackCardType targetCardId;
         BOOL forward = YES;
         
         if (self.panDirection == GBGestureVerticalPan) {
-            //topcard domain
-            if (newFrame.origin.y >= 0) {
-                targetOrigin = CGPointMake(self.currentCard.view.frame.origin.x, self.currentCard.view.frame.size.height-GBVerticalCardOverlapDistance);
-                distanceRemaining = fabs(targetOrigin.y - self.currentCard.view.frame.origin.y);
+            // top card domain
+            if (newOffset.dy >= 0) {
+                targetOffset = [self _targetOffsetForMainCardToShowCard:GBCardStackCardTypeTop];
+                distanceRemaining = fabs(targetOffset.dy - currentOffset.dy);
                 targetSpeed = fabs(velocity.y);
-                targetCardId = GBCardViewTopCard;
+                targetCardId = GBCardStackCardTypeTop;
                 if (velocity.y < 0) {
                     forward = NO;
                 }
             }
-            //bottomcard domain
+            // bottom card domain
             else {
-                targetOrigin = CGPointMake(self.currentCard.view.frame.origin.x, -self.currentCard.view.frame.size.height+GBVerticalCardOverlapDistance);
-                distanceRemaining = fabs(targetOrigin.y - self.currentCard.view.frame.origin.y);
+                targetOffset = [self _targetOffsetForMainCardToShowCard:GBCardStackCardTypeBottom];
+                distanceRemaining = fabs(targetOffset.dy - currentOffset.dy);
                 targetSpeed = fabs(velocity.y);
-                targetCardId = GBCardViewBottomCard;
+                targetCardId = GBCardStackCardTypeBottom;
                 if (velocity.y > 0) {
                     forward = NO;
                 }
             }
         }
         else {
-            //leftcard domain
-            if (newFrame.origin.x >= 0) {
-                targetOrigin = CGPointMake(self.currentCard.view.frame.size.width-GBHorizontalCardOverlapDistance, self.currentCard.view.frame.origin.y);
-                distanceRemaining = fabs(targetOrigin.x - self.currentCard.view.frame.origin.x);
+            // left card domain
+            if (newOffset.dx >= 0) {
+                targetOffset = [self _targetOffsetForMainCardToShowCard:GBCardStackCardTypeLeft];
+                distanceRemaining = fabs(targetOffset.dx - currentOffset.dx);
                 targetSpeed = fabs(velocity.x);
-                targetCardId = GBCardViewLeftCard;
+                targetCardId = GBCardStackCardTypeLeft;
                 if (velocity.x < 0) {
                     forward = NO;
                 }
             }
-            //rightcard domain
+            // right card domain
             else {
-                targetOrigin = CGPointMake(-self.currentCard.view.frame.size.width+GBHorizontalCardOverlapDistance, self.currentCard.view.frame.origin.y);
-                distanceRemaining = fabs(targetOrigin.x - self.currentCard.view.frame.origin.x);
+                targetOffset = [self _targetOffsetForMainCardToShowCard:GBCardStackCardTypeRight];
+                distanceRemaining = fabs(targetOffset.dx - currentOffset.dx);
                 targetSpeed = fabs(velocity.x);
-                targetCardId = GBCardViewRightCard;
+                targetCardId = GBCardStackCardTypeRight;
                 if (velocity.x > 0) {
                     forward = NO;
                 }
             }
         }
             
-        //check to see if that movement is valid, movements can't be "diagonal" and target cant be nil
+        // check to see if that movement is valid, movements can't be "diagonal" and target can't be nil
         BOOL isValidMove = NO;
         
         switch (self.currentCardId) {
-            case GBCardViewMainCard:
+            case GBCardStackCardTypeMain: {
                 isValidMove = YES;
-                break;
+            } break;
                 
-            case GBCardViewLeftCard:
+            case GBCardStackCardTypeLeft: {
                 if (self.panDirection == GBGestureHorizontalPan) {
                     isValidMove = YES;
                 }
-                break;
+            } break;
                 
-            case GBCardViewRightCard:
+            case GBCardStackCardTypeRight: {
                 if (self.panDirection == GBGestureHorizontalPan) {
                     isValidMove = YES;
                 }
-                break;
+            } break;
                 
-            case GBCardViewTopCard:
+            case GBCardStackCardTypeTop: {
                 if (self.panDirection == GBGestureVerticalPan) {
                     isValidMove = YES;
                 }
-                break;
+            } break;
                 
-            case GBCardViewBottomCard:
+            case GBCardStackCardTypeBottom: {
                 if (self.panDirection == GBGestureVerticalPan) {
                     isValidMove = YES;
                 }
-                break;
+            } break;
         }
 
-        //check if targetcard is not nil
-        if (![self cardWithIdentifier:targetCardId]) {
+        // check if targetcard is not nil
+        if (![self _cardWithIdentifier:targetCardId]) {
             isValidMove = NO;
             //cancel the gesture
             self.panGestureRecognizer.enabled = NO;
             self.panGestureRecognizer.enabled = YES;
         }
         
-        //if move isnt valid, return early
+        // if move isnt valid, return early
         if (!isValidMove) return;
         
         
         /* Following section moves the card and changes state, shud only go here if haven't returned early yet ie if move is valid */
             
-        //make sure target card is loaded
+        // make sure target card is loaded
         if (sender.state != UIGestureRecognizerStateCancelled) {
-            [self loadCard:targetCardId];
+            [self _loadCard:targetCardId];
         }
-        //if the gesture is cancelled, reset the main card to top where it should be
+        // if the gesture is cancelled, reset the main card to top where it should be
         else {
-            //force default frame
-            self.mainCard.view.frame = CGRectMake(0, 0, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
-            [self loadCard:GBCardViewMainCard];
+            // force default frame
+            self.mainCardOffset = CGVectorMake(0., 0.);
+            [self _loadCard:GBCardStackCardTypeMain];
         }
         
-        //commit the change
-        if ((sender.state == UIGestureRecognizerStateChanged) || (sender.state == UIGestureRecognizerStateEnded)) {
-            self.mainCard.view.frame = newFrame;
-            self.originCopy = newFrame.origin;
+        // dragging: commit the change
+        if (sender.state == UIGestureRecognizerStateChanged) {
+            self.mainCardOffset = newOffset;
+            self.lastOffset = newOffset;
         }
-        
-        //finish gesture
-        if ((sender.state == UIGestureRecognizerStateEnded) || (sender.state == UIGestureRecognizerStateFailed)) {
+        // finished dragging: finish gesture
+        else if ((sender.state == UIGestureRecognizerStateEnded) || (sender.state == UIGestureRecognizerStateFailed)) {
             //adjust slide speed
             if (self.panDirection == GBGestureHorizontalPan) {
-                if (targetSpeed < GBHorizontalMinimumAutoSlideSpeed) {
-                    targetSpeed = GBHorizontalMinimumAutoSlideSpeed;
-                }
-                else if (targetSpeed > GBHorizontalMaximumAutoSlideSpeed) {
-                    targetSpeed = GBHorizontalMaximumAutoSlideSpeed;
-                }
+                targetSpeed = ThresholdCGFloat(targetSpeed, HorizontalMinimumAutoSlideSpeed, HorizontalMaximumAutoSlideSpeed);
             }
             else {
-                if (targetSpeed < GBVerticalMinimumAutoSlideSpeed) {
-                    targetSpeed = GBVerticalMinimumAutoSlideSpeed;
-                }
-                else if (targetSpeed > GBVerticalMaximumAutoSlideSpeed) {
-                    targetSpeed = GBVerticalMaximumAutoSlideSpeed;
-                }
+                targetSpeed = ThresholdCGFloat(targetSpeed, VerticalMinimumAutoSlideSpeed, VerticalMaximumAutoSlideSpeed);
             }
             
             //calculate animation duration
             NSTimeInterval animationDuration = distanceRemaining/targetSpeed;
                     
             //commit animations
+            [self.view layoutIfNeeded];
             [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.panGestureRecognizer.enabled = NO;
                 self.busy = YES;
                 
-                //animate
+                // animate
                 if (forward) {
-                    self.mainCard.view.frame = CGRectMake(targetOrigin.x, targetOrigin.y, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
+                    self.mainCardOffset = targetOffset;
                 }
                 else {
-                    self.mainCard.view.frame = CGRectMake(0, 0, self.mainCard.view.frame.size.width, self.mainCard.view.frame.size.height);
+                    self.mainCardOffset = CGVectorMake(0., 0.);
                 }
-            } completion:^(BOOL finished) {
                 
-                //set currentcardid at end of animation
+                [self.view layoutIfNeeded];
+            } completion:^(BOOL finished) {
+                // set current card id at end of animation
                 if (forward) {
-                    
-                    //Flurry
-                    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:self.currentCardId], @"source", [GBCardStackController stringForCardId:targetCardId], @"destination", @"pan", @"type", nil];
-                    _tp(@"GBCardStack: Slide card", dict);
+                    // notify delegate
+                    [self _notifyDelegateWithDestination:targetCardId source:self.currentCardId transitionType:GBCardStackCardTransitionTypePan];
                     
                     self.currentCardId = targetCardId;
                     self.tapGestureRecognizer.enabled = YES;
                     self.mainCardUserInteraction = NO;
                 }
                 else {
-                    
-                    //Flurry
-                    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:self.currentCardId], @"source", [GBCardStackController stringForCardId:GBCardViewMainCard], @"destination", @"pan", @"type", nil];
-                    _tp(@"GBCardStack: Slide card", dict);
+                    // notify delegate
+                    [self _notifyDelegateWithDestination:GBCardStackCardTypeMain source:self.currentCardId transitionType:GBCardStackCardTransitionTypePan];
                     
                     
-                    //unload existing card
-                    if (self.currentCardId != GBCardViewMainCard) {
-                        [self.currentCard.view removeFromSuperview];   
+                    // unload existing card
+                    if (self.currentCardId != GBCardStackCardTypeMain) {
+                        RemoveChildViewController(self.currentCard);
                     }
                     else {
-                        [[self cardWithIdentifier:targetCardId].view removeFromSuperview];
+                        RemoveChildViewController([self _cardWithIdentifier:targetCardId]);
                     }
                     
-                    //change state
-                    self.currentCardId = GBCardViewMainCard;
+                    // change state
+                    self.currentCardId = GBCardStackCardTypeMain;
                     self.tapGestureRecognizer.enabled = NO;
                     self.mainCardUserInteraction = YES;
                 }
@@ -476,16 +462,14 @@ const double GBVerticalAutoSlideSpeed = 950;
     }
 }
 
--(void)handleTap:(UITapGestureRecognizer *)sender {
+- (void)handleTap:(UITapGestureRecognizer *)sender {
     if (!self.lock) {
         if (sender.state == UIGestureRecognizerStateRecognized) {
-            if ((self.currentCardId != GBCardViewMainCard) && (!self.busy)) {
-                //Flurry
-                NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[GBCardStackController stringForCardId:self.currentCardId], @"source", [GBCardStackController stringForCardId:GBCardViewMainCard], @"destination", @"tap on edge", @"type", nil];
-                _tp(@"GBCardStack: Slide card", dict);
+            if ((self.currentCardId != GBCardStackCardTypeMain) && (!self.busy)) {
+                // notify delegate
+                [self _notifyDelegateWithDestination:GBCardStackCardTypeMain source:self.currentCardId transitionType:GBCardStackCardTransitionTypeTapOnEdge];
                 
-                
-                [self restoreMainCardWithAnimation:YES];
+                [self restoreMainCardAnimated:YES];
             }
         }
     }
@@ -507,44 +491,85 @@ const double GBVerticalAutoSlideSpeed = 950;
     }
 }
 
-#pragma mark - Convenience
+#pragma mark - Private
 
-+(NSString *)stringForCardId:(GBCardViewCardIdentifier)cardId {
-    switch (cardId) {
-        case GBCardViewMainCard:
-            return @"GBCardViewMainCard";
+- (CGVector)_targetOffsetForMainCardToShowCard:(GBCardStackCardType)card {
+    return [self _targetOffsetForMainCardToShowCard:card swappingWidthHeight:NO];
+}
+
+- (CGVector)_targetOffsetForMainCardToShowCard:(GBCardStackCardType)card swappingWidthHeight:(BOOL)shouldSwap {
+    CGFloat width = !shouldSwap ? self.view.bounds.size.width : self.view.bounds.size.height;
+    CGFloat height = !shouldSwap ? self.view.bounds.size.height : self.view.bounds.size.width;
+    
+    switch (card) {
+        case GBCardStackCardTypeLeft: {
+            return CGVectorMake((width - CardOverlapDistanceHorizontal),
+                                0.);
+        } break;
             
-        case GBCardViewLeftCard:
-            return @"GBCardViewLeftCard";
+        case GBCardStackCardTypeRight: {
+            return CGVectorMake(-(width - CardOverlapDistanceHorizontal),
+                                0.);
+        } break;
             
-        case GBCardViewRightCard:
-            return @"GBCardViewRightCard";
+        case GBCardStackCardTypeTop: {
+            return CGVectorMake(0.,
+                                (height - CardOverlapDistanceVertical));
+        } break;
             
-        case GBCardViewTopCard:
-            return @"GBCardViewTopCard";
+        case GBCardStackCardTypeBottom: {
+            return CGVectorMake(0.,
+                                -(height - CardOverlapDistanceVertical));
+        } break;
             
-        case GBCardViewBottomCard:
-            return @"GBCardViewBottomCard";
+        case GBCardStackCardTypeMain: {
+            return CGVectorMake(0.,
+                                0.);
+        } break;
     }
 }
 
--(void)loadCard:(GBCardViewCardIdentifier)cardIdentifier {
-    //hide any other cards except for mainCard in case they are visible
-    for (int i=1; i<5; i++) {
+- (void)_loadCard:(GBCardStackCardType)cardIdentifier {
+    // remove any other cards from the view hierarchy except for mainCard in case they are visible
+    for (NSUInteger i=1; i<5; i++) {
         if (i != cardIdentifier) {
-            if ([self cardWithIdentifier:i]) { 
-                [[self cardWithIdentifier:i].view removeFromSuperview]; 
+            if ([self _cardWithIdentifier:i]) {
+                RemoveChildViewController([self _cardWithIdentifier:i]);
             }
         }
     }
     
-    //show card
-    if (![self cardWithIdentifier:cardIdentifier].view.superview) {
-        [self.view insertSubview:[self cardWithIdentifier:cardIdentifier].view belowSubview:self.mainCard.view];
+    // add card to view hierarchy
+    UIViewController *newCard = [self _cardWithIdentifier:cardIdentifier];
+    if (!newCard.view.superview) {
+        AddChildViewController(self, newCard);// adds the child viewcontroller
+        AutoLayout(newCard.view);// turn on auto layout for the child VC
+        [self.view bringSubviewToFront:self.mainCard.view];// ensures that the main one is on top
+        
+        // if it's the main card
+        if (cardIdentifier == GBCardStackCardTypeMain) {
+            // create our offset constraints
+            self.horizontalConstraint = [NSLayoutConstraint constraintWithItem:newCard.view attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1. constant:0.];
+            self.verticalConstraint = [NSLayoutConstraint constraintWithItem:newCard.view attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1. constant:0.];
+
+            // add the constraints to the view
+            [self.view addConstraints:@[
+                self.horizontalConstraint,// horizontal offset
+                self.verticalConstraint,// vertical offset
+                [NSLayoutConstraint constraintWithItem:self.view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:newCard.view attribute:NSLayoutAttributeWidth multiplier:1. constant:0.],// equal width
+                [NSLayoutConstraint constraintWithItem:self.view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:newCard.view attribute:NSLayoutAttributeHeight multiplier:1. constant:0.],// equal height
+            ]];
+        }
+        // all other cards
+        else {
+            // add the full width and height constraints
+            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[newCard]|" options:0 metrics:nil views:@{@"newCard": newCard.view}]]; // full width
+            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[newCard]|" options:0 metrics:nil views:@{@"newCard": newCard.view}]]; // full height
+        }
     }
 }
 
--(UIViewController *)cardWithIdentifier:(GBCardViewCardIdentifier)cardIdentifier {
+- (UIViewController *)_cardWithIdentifier:(GBCardStackCardType)cardIdentifier {
     if ([[self.cards objectAtIndex:cardIdentifier] isKindOfClass:[NSNull class]]) {
         return nil;
     }
@@ -553,7 +578,7 @@ const double GBVerticalAutoSlideSpeed = 950;
     }
 }
 
--(void)_attachGestureRecognizersToView:(UIView *)view {
+- (void)_attachGestureRecognizersToView:(UIView *)view {
     [self.panGestureRecognizer.view removeGestureRecognizer:self.panGestureRecognizer];
     [self.tapGestureRecognizer.view removeGestureRecognizer:self.tapGestureRecognizer];
 
@@ -561,18 +586,38 @@ const double GBVerticalAutoSlideSpeed = 950;
     [view addGestureRecognizer:self.tapGestureRecognizer];
 }
 
+- (void)_updateMainCardShadow {
+    UIViewController *mainCard = self.mainCard;
+    mainCard.view.layer.masksToBounds = NO;
+    mainCard.view.layer.shadowColor = [kDefaultShadowColor CGColor];
+    mainCard.view.layer.shadowRadius = kDefaultShadowRadius;
+    mainCard.view.layer.shadowOpacity = kDefaultShadowOpacity;
+    mainCard.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:mainCard.view.bounds].CGPath;
+    mainCard.view.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+    mainCard.view.layer.shouldRasterize = YES;
+}
+
 #pragma mark - Accessors
 
--(UIView *)maskView {
+- (void)setMainCardOffset:(CGVector)offset {
+    self.horizontalConstraint.constant = offset.dx;
+    self.verticalConstraint.constant = offset.dy;
+}
+
+- (CGVector)mainCardOffset {
+    return CGVectorMake(self.horizontalConstraint.constant, self.verticalConstraint.constant);
+}
+
+- (UIView *)maskView {
     if (!_maskView) {
-        _maskView = [[UIView alloc] initWithFrame:self.mainCard.view.bounds];
+        _maskView = AutoLayout([[UIView alloc] initWithFrame:self.mainCard.view.bounds]);
         _maskView.userInteractionEnabled = YES;
     }
     
     return _maskView;
 }
 
--(UIPanGestureRecognizer *)panGestureRecognizer {
+- (UIPanGestureRecognizer *)panGestureRecognizer {
     if (!_panGestureRecognizer) {
         _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     }
@@ -580,11 +625,7 @@ const double GBVerticalAutoSlideSpeed = 950;
     return _panGestureRecognizer;
 }
 
--(void)setPanGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer {
-    _panGestureRecognizer = panGestureRecognizer;
-}
-
--(UITapGestureRecognizer *)tapGestureRecognizer {
+- (UITapGestureRecognizer *)tapGestureRecognizer {
     if (!_tapGestureRecognizer) {
         _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     }
@@ -592,39 +633,28 @@ const double GBVerticalAutoSlideSpeed = 950;
     return _tapGestureRecognizer;
 }
 
--(void)setTapGestureRecognizer:(UITapGestureRecognizer *)tapGestureRecognizer {
-    _tapGestureRecognizer = tapGestureRecognizer;
-}
-
--(BOOL)mainCardUserInteraction {
-    return _mainCardUserInteraction;
-}
-
--(void)setMainCardUserInteraction:(BOOL)enabled {
-    //remove mask view
+- (void)setMainCardUserInteraction:(BOOL)enabled {
+    // remove mask view
     if (enabled) {
         [self.maskView removeFromSuperview];
         [self _attachGestureRecognizersToView:self.mainCard.view];
     }
-    //add mask view
+    // add mask view
     else {
         [self.mainCard.view addSubview:self.maskView];
-        self.maskView.frame = self.mainCard.view.bounds;
+        [self.mainCard.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[maskView]|" options:0 metrics:nil views:@{@"maskView": self.maskView}]];// full width
+        [self.mainCard.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[maskView]|" options:0 metrics:nil views:@{@"maskView": self.maskView}]];// full height
         [self _attachGestureRecognizersToView:self.maskView];
     }
     
     _mainCardUserInteraction = enabled;
 }
 
--(UIViewController *)currentCard {
+- (UIViewController *)currentCard {
     return [self.cards objectAtIndex:self.currentCardId];
 }
 
--(void)setCurrentCardId:(GBCardViewCardIdentifier)currentCardId {
-    _currentCardId = currentCardId;
-}
-
--(NSMutableArray *)cards {
+- (NSMutableArray *)cards {
     //alloc/init an array first if its nil
     if (!_cards) {
         NSNull *myNull = [NSNull null];
@@ -634,89 +664,89 @@ const double GBVerticalAutoSlideSpeed = 950;
     return _cards;
 }
 
--(void)setMainCard:(UIViewController *)card {
-    //standard setter
-    [self.cards replaceObjectAtIndex:GBCardViewMainCard withObject:card];
+- (void)setMainCard:(UIViewController *)card {
+    // standard setter
+    [self.cards replaceObjectAtIndex:GBCardStackCardTypeMain withObject:card];
     card.cardStackController = self;
     
-    //gesture recognisers
+    // load the card, this attaches the constraints to it and makes sure it's in the view hierarchy
+    [self _loadCard:GBCardStackCardTypeMain];
+    
+    // gesture recognisers
     self.panGestureRecognizer.delegate = self;
     self.tapGestureRecognizer.delegate = self;
     [self _attachGestureRecognizersToView:card.view];
-    
-    //shadow
-    card.view.layer.masksToBounds = NO;
-    card.view.layer.shadowColor = [[UIColor blackColor] CGColor];
-    card.view.layer.shadowRadius = 16;
-    card.view.layer.shadowOpacity = 1;
-    card.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:card.view.bounds].CGPath;
 }
 
--(GBCardStackController *)mainCard {
-    return [self.cards objectAtIndex:GBCardViewMainCard];
+- (GBCardStackController *)mainCard {
+    return [self.cards objectAtIndex:GBCardStackCardTypeMain];
 }
 
--(void)setLeftCard:(UIViewController *)card {
-    [self.cards replaceObjectAtIndex:GBCardViewLeftCard withObject:card];
+- (void)setLeftCard:(UIViewController *)card {
+    [self.cards replaceObjectAtIndex:GBCardStackCardTypeLeft withObject:card];
     card.cardStackController = self;
 }
 
--(GBCardStackController *)leftCard {
-    return [self.cards objectAtIndex:GBCardViewLeftCard];
+- (GBCardStackController *)leftCard {
+    return [self.cards objectAtIndex:GBCardStackCardTypeLeft];
 }
 
--(void)setRightCard:(UIViewController *)card {
-    [self.cards replaceObjectAtIndex:GBCardViewRightCard withObject:card];
+- (void)setRightCard:(UIViewController *)card {
+    [self.cards replaceObjectAtIndex:GBCardStackCardTypeRight withObject:card];
     card.cardStackController = self;
 }
 
--(GBCardStackController *)rightCard {
-    return [self.cards objectAtIndex:GBCardViewRightCard];
+- (GBCardStackController *)rightCard {
+    return [self.cards objectAtIndex:GBCardStackCardTypeRight];
 }
 
--(void)setTopCard:(UIViewController *)card {
-    [self.cards replaceObjectAtIndex:GBCardViewTopCard withObject:card];
+- (void)setTopCard:(UIViewController *)card {
+    [self.cards replaceObjectAtIndex:GBCardStackCardTypeTop withObject:card];
     card.cardStackController = self;
 }
 
--(GBCardStackController *)topCard {
-    return [self.cards objectAtIndex:GBCardViewTopCard];
+- (GBCardStackController *)topCard {
+    return [self.cards objectAtIndex:GBCardStackCardTypeTop];
 }
 
--(void)setBottomCard:(UIViewController *)card {
-    [self.cards replaceObjectAtIndex:GBCardViewBottomCard withObject:card];
+- (void)setBottomCard:(UIViewController *)card {
+    [self.cards replaceObjectAtIndex:GBCardStackCardTypeBottom withObject:card];
     card.cardStackController = self;
 }
 
--(GBCardStackController *)bottomCard {
-    return [self.cards objectAtIndex:GBCardViewBottomCard];
+- (GBCardStackController *)bottomCard {
+    return [self.cards objectAtIndex:GBCardStackCardTypeBottom];
 }
 
 #pragma mark - View lifecycle
 
--(void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    if ([self cardWithIdentifier:GBCardViewMainCard]) {
+    // if we have a main card
+    if ([self _cardWithIdentifier:GBCardStackCardTypeMain]) {
+        // and it's not in our view hierarchy when we appear
         if (!self.mainCard.view.superview) {
-            [self.view addSubview:self.mainCard.view];
-            self.currentCardId = GBCardViewMainCard;
+            // then add the card
+            [self _loadCard:GBCardStackCardTypeMain];
+            self.currentCardId = GBCardStackCardTypeMain;
             self.tapGestureRecognizer.enabled = NO;
         }
     }
 }
 
--(void)viewDidUnload {
-    [super viewDidUnload];
+- (void)viewDidLayoutSubviews {
+    [self _updateMainCardShadow];
     
-    _cards = nil;
-    self.panGestureRecognizer = nil;
-    self.tapGestureRecognizer = nil;
+    [super viewDidLayoutSubviews];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    // if we are staying in portrait -> portrait, or landscape -> landscape, then we should not swap, other we should.
+    BOOL shouldSwap = UIInterfaceOrientationIsPortrait(self.interfaceOrientation) != UIInterfaceOrientationIsPortrait(toInterfaceOrientation);
+    
+    // this one adds support for rotations, but we need to calculate the target offset for the destination orientation, so we manage the swapping here
+    self.mainCardOffset = [self _targetOffsetForMainCardToShowCard:self.currentCardId swappingWidthHeight:shouldSwap];
 }
 
 @end

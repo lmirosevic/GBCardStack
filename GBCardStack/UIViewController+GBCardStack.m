@@ -15,13 +15,13 @@
 
 #pragma mark - Associated objects
 
-static char gbSlideableViewsKey;
+static char const gbSlideableViewsKey;
 
--(void)setSlideableViews:(NSMutableArray *)slideableViews {
+- (void)setSlideableViews:(NSMutableArray *)slideableViews {
     objc_setAssociatedObject(self, &gbSlideableViewsKey, slideableViews, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
--(NSMutableArray *)slideableViews {
+- (NSMutableArray *)slideableViews {
     if (!objc_getAssociatedObject(self, &gbSlideableViewsKey)) {
         objc_setAssociatedObject(self, &gbSlideableViewsKey, [[NSMutableArray alloc] init], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
@@ -29,13 +29,13 @@ static char gbSlideableViewsKey;
     return objc_getAssociatedObject(self, &gbSlideableViewsKey);
 }
 
-static char gbCardStackControllerKey;
+static char const gbCardStackControllerKey;
 
--(void)setCardStackController:(GBCardStackController *)cardStackController {
+- (void)setCardStackController:(GBCardStackController *)cardStackController {
     objc_setAssociatedObject(self, &gbCardStackControllerKey, cardStackController, OBJC_ASSOCIATION_ASSIGN);
 }
 
--(GBCardStackController *)cardStackController {
+- (GBCardStackController *)cardStackController {
     return objc_getAssociatedObject(self, &gbCardStackControllerKey);
 }
 

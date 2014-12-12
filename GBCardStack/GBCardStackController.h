@@ -10,20 +10,21 @@
 
 #import "UIViewController+GBCardStack.h"
 
-typedef enum {
-    GBCardViewMainCard = 0,
-    GBCardViewLeftCard,
-    GBCardViewRightCard,
-    GBCardViewTopCard,
-    GBCardViewBottomCard,
-} GBCardViewCardIdentifier;
+#pragma mark - Main Class
 
-typedef enum {
-    GBGestureHorizontalPan = 0,
-    GBGestureVerticalPan,
-} GBGesturePanDirection;
+typedef NS_ENUM(NSUInteger, GBCardStackCardType) {
+    GBCardStackCardTypeMain = 0,
+    GBCardStackCardTypeLeft,
+    GBCardStackCardTypeRight,
+    GBCardStackCardTypeTop,
+    GBCardStackCardTypeBottom,
+};
+
+@protocol GBCardStackDelegate;
 
 @interface GBCardStackController : UIViewController <UIGestureRecognizerDelegate>
+
+@property (weak, nonatomic) id<GBCardStackDelegate>                 delegate;
 
 @property (strong, nonatomic) UIViewController                      *mainCard;
 @property (strong, nonatomic) UIViewController                      *leftCard;
@@ -36,7 +37,32 @@ typedef enum {
 @property (strong, nonatomic, readonly) UIViewController            *currentCard;
 @property (assign, nonatomic, readonly) BOOL                        isPanning;
 
--(void)slideCard:(GBCardViewCardIdentifier)targetCardId animated:(BOOL)animated;
--(void)restoreMainCardWithAnimation:(BOOL)animation;
+/**
+ Shows the desired card.
+ */
+- (void)showCard:(GBCardStackCardType)targetCardId animated:(BOOL)animated;
+
+/**
+ Shows the main card.
+ */
+- (void)restoreMainCardAnimated:(BOOL)animated;
+
+@end
+
+#pragma mark - Delegate
+
+typedef NS_ENUM(NSUInteger, GBCardStackCardTransitionType) {
+    GBCardStackCardTransitionTypeProgrammatic = 0,
+    GBCardStackCardTransitionTypeTapOnEdge,
+    GBCardStackCardTransitionTypePan,
+};
+
+@protocol GBCardStackDelegate <NSObject>
+@optional
+
+/**
+ Called when the controller transitions from showing one card to showing another.
+ */
+- (void)GBCardStackController:(GBCardStackController *)cardStackController didShowCard:(GBCardStackCardType)targetCard fromPreviouslyShownCard:(GBCardStackCardType)previousCard type:(GBCardStackCardTransitionType)transitionType;
 
 @end

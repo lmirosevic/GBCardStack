@@ -128,7 +128,7 @@ typedef NS_ENUM(NSUInteger, GBGesturePanDirection) {
     if ((self.currentCardId == GBCardStackCardTypeMain) && !self.isPanning) {
 //        NSLog(@"Already showing main card.");
     }
-    if (!self.lock && self.isPanning) {
+    else if (!self.lock && self.isPanning) {
         self.busy = YES;
         
         //find which card is underneath

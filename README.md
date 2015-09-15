@@ -37,7 +37,7 @@ self.window.rootViewController = cardStackController;
 In your view controllers which you place in the card stack, define which views are *slideable*. You should add any `UIView` subclass which responds to `UITouch` events (i.e. has `userInteractionEnabled` set to YES) which you want to still trigger a card slide. If you don't do this then only that `UIView` subclass will receive touch events and it will not cause the underlying card to slide as the user pans. You would normally put any `UIButton`'s in here, but not a `UISlider` because you wouldn't want a pan inside a pan. You might need to include `UIViewController+GBCardStack.h` in your UIViewController subclass.
 
 ```objective-c
-[self.slideableView addObject:self.someButton];
+[self.slideableViews addObject:self.someButton];
 ```
 
 Demo project

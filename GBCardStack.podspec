@@ -11,6 +11,6 @@ Pod::Spec.new do |s|
   s.public_header_files    = 'GBCardStack/GBCardStackController.h', 'GBCardStack/UIViewController+GBCardStack.h', 'GBCardStack/GBCardStackAnalyticsModule.h', 'GBCardStack/GBCardStack.h'
   s.requires_arc           = true
 
-  s.dependency 'GBAnalytics', '~> 3.0'
+  s.dependency 'GBAnalytics', '~> 4.0'
   s.dependency 'GBToolbox'
 end
